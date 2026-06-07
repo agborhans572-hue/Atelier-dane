@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin | Dane Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;vertical-align:middle}
+  .tab-btn{display:flex;align-items:center;gap:.5rem;padding:.625rem 1rem;border-radius:.75rem;font-size:.875rem;font-weight:500;color:#5c5f61;transition:all .15s;cursor:pointer;border:none;background:transparent;font-family:Inter,sans-serif;width:100%;text-align:left}
+  .tab-btn:hover{background:#f0f4f7;color:#181c1f}
+  .tab-btn.active{background:#e8f0f4;color:#006686;font-weight:600}
+  .badge{display:inline-flex;align-items:center;padding:.2rem .6rem;border-radius:9999px;font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+  .badge-pending{background:#fef3c7;color:#92400e}
+  .badge-confirmed{background:#dbeafe;color:#1e40af}
+  .badge-processing{background:#ede9fe;color:#5b21b6}
+  .badge-shipped{background:#d1fae5;color:#065f46}
+  .badge-delivered{background:#bbf7d0;color:#014532}
+  .badge-cancelled{background:#fee2e2;color:#991b1b}
+  .stat-card{background:#fff;border:1px solid #e5e8ec;border-radius:1.25rem;padding:1.5rem}
+  .spinner{width:24px;height:24px;border:2px solid #e5e8ec;border-top-color:#006686;border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  table{width:100%;border-collapse:collapse}
+  thead th{text-align:left;font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#5c5f61;padding:.75rem 1rem;border-bottom:1px solid #e5e8ec;}
+  tbody td{padding:.875rem 1rem;border-bottom:1px solid #f7fafd;font-size:.875rem;color:#181c1f}
+  tbody tr:hover td{background:#fafcfd}
+  .field-wrap input,.field-wrap select{width:100%;border:1px solid #bec8ce;border-radius:.75rem;padding:.625rem .875rem;font-family:Inter,sans-serif;font-size:.875rem;color:#181c1f;outline:none;transition:border-color .2s;}
+  .field-wrap input:focus,.field-wrap select:focus{border-color:#006686}
+  .field-wrap label{display:block;font-size:.6875rem;font-weight:600;color:#5c5f61;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
+</style>
+<script src="config.js"></script>
+</head>
+<body class="bg-[#f0f4f7] text-[#181c1f] font-['Inter'] antialiased min-h-screen">
+
+<!-- Auth guard -->
+<div id="auth-wall" class="hidden fixed inset-0 bg-[#f7fafd] flex items-center justify-center z-50">
+  <div class="text-center max-w-sm px-6">
+    <span class="material-symbols-outlined text-[#006686] text-5xl block mb-4">admin_panel_settings</span>
+    <h2 class="font-['Plus_Jakarta_Sans'] text-2xl font-semibold mb-3">Admin Access Only</h2>
+    <p class="text-[#5c5f61] font-light mb-6">You must be signed in with admin privileges to access this area.</p>
+    <a href="index.html" class="bg-[#006686] text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity inline-block">Return to site</a>
+  </div>
+</div>
+
+<!-- Layout -->
+<div id="admin-layout" class="hidden flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-60 flex-shrink-0 bg-white border-r border-[#e5e8ec] flex flex-col min-h-screen">
+    <div class="p-5 border-b border-[#e5e8ec]">
+      <p class="font-['Plus_Jakarta_Sans'] font-bold text-[#181c1f] text-base">Dane Design</p>
+      <p class="text-xs text-[#5c5f61] mt-0.5">Admin Dashboard</p>
+    </div>
+    <nav class="p-3 space-y-1 flex-1">
+      <button class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')"><span class="material-symbols-outlined text-lg">analytics</span>Analytics</button>
+      <button class="tab-btn" data-tab="orders" onclick="switchTab('orders')"><span class="material-symbols-outlined text-lg">shopping_bag</span>Orders</button>
+      <button class="tab-btn" data-tab="products" onclick="switchTab('products')"><span class="material-symbols-outlined text-lg">inventory_2</span>Products</button>
+      <button class="tab-btn" data-tab="customers" onclick="switchTab('customers')"><span class="material-symbols-outlined text-lg">group</span>Customers</button>
+      <button class="tab-btn" data-tab="reviews" onclick="switchTab('reviews')"><span class="material-symbols-outlined text-lg">star</span>Reviews</button>
+    </nav>
+    <div class="p-3 border-t border-[#e5e8ec]">
+      <a href="index.html" class="tab-btn"><span class="material-symbols-outlined text-lg">storefront</span>View site</a>
+      <button onclick="signOut()" class="tab-btn text-red-500 hover:bg-red-50"><span class="material-symbols-outlined text-lg">logout</span>Sign out</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 min-w-0 overflow-y-auto">
+    <div class="max-w-[1100px] mx-auto px-6 py-8">
+
+      <!-- Analytics -->
+      <div id="tab-analytics" class="tab-panel hidden">
+        <h1 class="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-[#181c1f] mb-6">Analytics</h1>
+        <div id="analytics-loading" class="text-center py-12"><div class="spinner mx-auto"></div></div>
+        <div id="analytics-content" class="hidden">
+          <div id="stats-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"></div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="stat-card">
+              <h3 class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f] mb-4">Recent Orders</h3>
+              <div id="recent-orders-mini" class="space-y-2"></div>
+            </div>
+            <div class="stat-card">
+              <h3 class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f] mb-4">Orders by Status</h3>
+              <div id="status-breakdown" class="space-y-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders -->
+      <div id="tab-orders" class="tab-panel hidden">
+        <div class="flex items-center justify-between mb-6">
+          <h1 class="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-[#181c1f]">Orders</h1>
+          <div class="flex items-center gap-3">
+            <div class="field-wrap"><select id="order-status-filter" onchange="loadAdminOrders()">
+              <option value="">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select></div>
+          </div>
+        </div>
+        <div id="orders-loading" class="text-center py-12"><div class="spinner mx-auto"></div></div>
+        <div id="orders-table-wrap" class="hidden bg-white border border-[#e5e8ec] rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table>
+              <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="orders-tbody"></tbody>
+            </table>
+          </div>
+          <div id="orders-pagination" class="p-4 border-t border-[#e5e8ec] flex items-center justify-between text-sm text-[#5c5f61]"></div>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div id="tab-products" class="tab-panel hidden">
+        <div class="flex items-center justify-between mb-6">
+          <h1 class="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-[#181c1f]">Products</h1>
+        </div>
+        <div id="products-loading" class="text-center py-12"><div class="spinner mx-auto"></div></div>
+        <div id="products-table-wrap" class="hidden bg-white border border-[#e5e8ec] rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table>
+              <thead><tr><th>Product</th><th>SKU</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="products-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customers -->
+      <div id="tab-customers" class="tab-panel hidden">
+        <h1 class="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-[#181c1f] mb-6">Customers</h1>
+        <div id="customers-loading" class="text-center py-12"><div class="spinner mx-auto"></div></div>
+        <div id="customers-table-wrap" class="hidden bg-white border border-[#e5e8ec] rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table>
+              <thead><tr><th>Customer</th><th>Email</th><th>Orders</th><th>Total spent</th><th>Joined</th></tr></thead>
+              <tbody id="customers-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div id="tab-reviews" class="tab-panel hidden">
+        <h1 class="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-[#181c1f] mb-6">Reviews</h1>
+        <div id="reviews-loading" class="text-center py-12"><div class="spinner mx-auto"></div></div>
+        <div id="reviews-list" class="space-y-4"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Order update modal -->
+<div id="order-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+    <div class="p-6 border-b border-[#e5e8ec] flex items-center justify-between">
+      <h3 class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f]">Update Order <span id="modal-order-num"></span></h3>
+      <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-[#f7fafd] flex items-center justify-center hover:bg-[#e5e8ec]"><span class="material-symbols-outlined text-base">close</span></button>
+    </div>
+    <div class="p-6">
+      <div class="field-wrap mb-4">
+        <label>Status</label>
+        <select id="modal-status">
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="processing">Processing</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div class="field-wrap mb-4">
+        <label>Tracking number</label>
+        <input type="text" id="modal-tracking" placeholder="e.g. DHL123456789"/>
+      </div>
+      <div class="field-wrap mb-5">
+        <label>Internal note</label>
+        <input type="text" id="modal-note" placeholder="Optional note for staff"/>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="saveOrderUpdate()" class="bg-[#006686] text-white font-medium px-6 py-2.5 rounded-full hover:opacity-90 text-sm">Save Changes</button>
+        <button onclick="closeModal()" class="text-sm text-[#5c5f61] px-4">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product edit modal -->
+<div id="product-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+    <div class="p-6 border-b border-[#e5e8ec] flex items-center justify-between">
+      <h3 class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f]">Edit Product</h3>
+      <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-[#f7fafd] flex items-center justify-center hover:bg-[#e5e8ec]"><span class="material-symbols-outlined text-base">close</span></button>
+    </div>
+    <div class="p-6">
+      <div class="field-wrap mb-4"><label>Price</label><input type="number" id="prod-price" min="0" step="0.01"/></div>
+      <div class="field-wrap mb-4">
+        <label>Status</label>
+        <select id="prod-status"><option value="active">Active</option><option value="draft">Draft</option><option value="archived">Archived</option></select>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="saveProductUpdate()" class="bg-[#006686] text-white font-medium px-6 py-2.5 rounded-full hover:opacity-90 text-sm">Save</button>
+        <button onclick="closeModal()" class="text-sm text-[#5c5f61] px-4">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var BACKEND_URL = window.DANE_CONFIG?.backendUrl || 'http://localhost:3001';
+var session = null;
+var editingOrderId = null;
+var editingProductId = null;
+var ordersPage = 1;
+
+function fmt(n){return'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function fmtDate(s){return new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function getToken(){return session&&session.access_token||null;}
+function getHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};}
+
+function apiFetch(path,opts){
+  return fetch(BACKEND_URL+path,Object.assign({headers:getHeaders()},opts||{}))
+    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||'Request failed');return d;});});
+}
+
+function statusBadge(status){
+  var cls={'pending':'badge-pending','confirmed':'badge-confirmed','processing':'badge-processing','shipped':'badge-shipped','delivered':'badge-delivered','cancelled':'badge-cancelled'};
+  return'<span class="badge '+(cls[status]||'badge-pending')+'">'+status+'</span>';
+}
+
+function signOut(){localStorage.removeItem('dane-session');window.location.href='index.html';}
+function closeModal(){
+  document.getElementById('order-modal').style.display='none';
+  document.getElementById('product-modal').style.display='none';
+}
+
+function init(){
+  try{var s=localStorage.getItem('dane-session');if(s)session=JSON.parse(s);}catch(e){}
+
+  if(!session||!session.user){
+    document.getElementById('auth-wall').classList.remove('hidden');
+    return;
+  }
+
+  // Check admin role from profile
+  apiFetch('/api/profile')
+  .then(function(data){
+    var profile=data.profile||data;
+    if(profile.role!=='admin'){
+      document.getElementById('auth-wall').classList.remove('hidden');
+      return;
+    }
+    document.getElementById('admin-layout').classList.remove('hidden');
+    document.getElementById('admin-layout').style.display='flex';
+    var params=new URLSearchParams(window.location.search);
+    switchTab(params.get('tab')||'analytics');
+  })
+  .catch(function(){
+    document.getElementById('auth-wall').classList.remove('hidden');
+  });
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.tab-btn[data-tab]').forEach(function(b){
+    b.classList.toggle('active',b.dataset.tab===tab);
+  });
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.add('hidden');});
+  var panel=document.getElementById('tab-'+tab);
+  if(panel)panel.classList.remove('hidden');
+  history.replaceState(null,'','?tab='+tab);
+
+  if(tab==='analytics')loadAnalytics();
+  else if(tab==='orders')loadAdminOrders();
+  else if(tab==='products')loadAdminProducts();
+  else if(tab==='customers')loadCustomers();
+  else if(tab==='reviews')loadReviews();
+}
+
+// ─── ANALYTICS ───────────────────────────────────────────────────────────────
+function loadAnalytics(){
+  document.getElementById('analytics-loading').classList.remove('hidden');
+  document.getElementById('analytics-content').classList.add('hidden');
+
+  apiFetch('/api/admin/analytics')
+  .then(function(data){
+    document.getElementById('analytics-loading').classList.add('hidden');
+    document.getElementById('analytics-content').classList.remove('hidden');
+
+    var stats=data.analytics||data;
+    document.getElementById('stats-grid').innerHTML=[
+      {label:'Total Revenue',value:fmt(stats.total_revenue||0),icon:'payments',color:'#006686'},
+      {label:'Total Orders',value:Number(stats.total_orders||0).toLocaleString(),icon:'shopping_bag',color:'#5b21b6'},
+      {label:'Avg Order Value',value:fmt(stats.avg_order_value||0),icon:'trending_up',color:'#065f46'},
+      {label:'Total Customers',value:Number(stats.total_customers||0).toLocaleString(),icon:'group',color:'#92400e'},
+    ].map(function(s){
+      return'<div class="stat-card">'+
+        '<div class="flex items-start justify-between mb-2">'+
+          '<span class="material-symbols-outlined text-2xl" style="color:'+s.color+'">'+s.icon+'</span>'+
+        '</div>'+
+        '<p class="font-[\'Plus_Jakarta_Sans\'] text-2xl font-bold text-[#181c1f]">'+s.value+'</p>'+
+        '<p class="text-sm text-[#5c5f61] mt-1">'+s.label+'</p>'+
+      '</div>';
+    }).join('');
+
+    var recent=stats.recent_orders||[];
+    document.getElementById('recent-orders-mini').innerHTML=recent.slice(0,5).map(function(o){
+      return'<div class="flex items-center justify-between py-2 border-b border-[#f7fafd] last:border-0">'+
+        '<div><p class="text-sm font-medium text-[#181c1f]">'+o.order_number+'</p><p class="text-xs text-[#5c5f61]">'+fmtDate(o.created_at)+'</p></div>'+
+        '<div class="text-right">'+statusBadge(o.status)+'<p class="text-sm font-semibold text-[#006686] mt-1">'+fmt(o.total_amount)+'</p></div>'+
+      '</div>';
+    }).join('')||'<p class="text-sm text-[#5c5f61]">No recent orders</p>';
+
+    var byStatus=stats.orders_by_status||[];
+    document.getElementById('status-breakdown').innerHTML=byStatus.map(function(row){
+      var total=byStatus.reduce(function(s,r){return s+(+r.count||0);},0);
+      var pct=total>0?Math.round((+row.count/total)*100):0;
+      return'<div class="flex items-center gap-3">'+
+        statusBadge(row.status)+
+        '<div class="flex-1 bg-[#f7fafd] rounded-full h-2 overflow-hidden">'+
+          '<div class="h-2 bg-[#006686] rounded-full" style="width:'+pct+'%"></div>'+
+        '</div>'+
+        '<span class="text-sm font-semibold text-[#181c1f] w-8 text-right">'+row.count+'</span>'+
+      '</div>';
+    }).join('')||'<p class="text-sm text-[#5c5f61]">No data</p>';
+  })
+  .catch(function(){
+    document.getElementById('analytics-loading').innerHTML='<p class="text-red-600 text-sm">Could not load analytics.</p>';
+  });
+}
+
+// ─── ORDERS ──────────────────────────────────────────────────────────────────
+function loadAdminOrders(page){
+  page=page||1;ordersPage=page;
+  var statusFilter=document.getElementById('order-status-filter').value;
+  document.getElementById('orders-loading').classList.remove('hidden');
+  document.getElementById('orders-table-wrap').classList.add('hidden');
+
+  var qs='?page='+page+'&limit=20'+(statusFilter?'&status='+statusFilter:'');
+  apiFetch('/api/admin/orders'+qs)
+  .then(function(data){
+    document.getElementById('orders-loading').classList.add('hidden');
+    document.getElementById('orders-table-wrap').classList.remove('hidden');
+    var orders=data.orders||[];
+    document.getElementById('orders-tbody').innerHTML=orders.map(function(o){
+      var items=o.order_items||[];
+      return'<tr>'+
+        '<td><p class="font-['+'\'Plus_Jakarta_Sans\''+'] font-semibold text-[#006686] text-sm">'+o.order_number+'</p></td>'+
+        '<td class="text-sm">'+(o.profile?.full_name||o.guest_email||'Guest')+'</td>'+
+        '<td class="text-sm text-[#5c5f61]">'+items.length+' item'+(items.length!==1?'s':'')+'</td>'+
+        '<td class="font-semibold text-sm">'+fmt(o.total_amount)+'</td>'+
+        '<td>'+statusBadge(o.status)+'</td>'+
+        '<td class="text-xs text-[#5c5f61]">'+fmtDate(o.created_at)+'</td>'+
+        '<td><button onclick="openOrderModal(\''+o.id+'\',\''+o.order_number+'\',\''+o.status+'\',\''+(o.tracking_number||'')+'\',\''+(o.internal_note||')\')" class="text-xs bg-[#f0f4f7] hover:bg-[#e8f0f4] text-[#006686] font-medium px-3 py-1.5 rounded-lg transition-colors">Edit</button></td>'+
+      '</tr>';
+    }).join('')||'<tr><td colspan="7" class="text-center text-[#5c5f61] py-8">No orders found</td></tr>';
+
+    document.getElementById('orders-pagination').innerHTML=
+      '<span>Page '+page+'</span>'+
+      '<div class="flex gap-2">'+
+        (page>1?'<button onclick="loadAdminOrders('+(page-1)+')" class="px-3 py-1 rounded-lg border border-[#e5e8ec] text-sm hover:border-[#006686]">Prev</button>':'')+
+        (orders.length===20?'<button onclick="loadAdminOrders('+(page+1)+')" class="px-3 py-1 rounded-lg border border-[#e5e8ec] text-sm hover:border-[#006686]">Next</button>':'')+
+      '</div>';
+  })
+  .catch(function(){
+    document.getElementById('orders-loading').innerHTML='<p class="text-red-600 text-sm text-center">Could not load orders.</p>';
+  });
+}
+
+function openOrderModal(id,num,status,tracking,note){
+  editingOrderId=id;
+  document.getElementById('modal-order-num').textContent=num;
+  document.getElementById('modal-status').value=status;
+  document.getElementById('modal-tracking').value=tracking||'';
+  document.getElementById('modal-note').value=note||'';
+  document.getElementById('order-modal').style.display='flex';
+}
+
+function saveOrderUpdate(){
+  if(!editingOrderId)return;
+  var body={
+    status:document.getElementById('modal-status').value,
+    tracking_number:document.getElementById('modal-tracking').value.trim()||null,
+    internal_note:document.getElementById('modal-note').value.trim()||null
+  };
+  apiFetch('/api/admin/orders/'+editingOrderId,{method:'PATCH',body:JSON.stringify(body)})
+  .then(function(){closeModal();loadAdminOrders(ordersPage);showToast('Order updated');})
+  .catch(function(err){showToast(err.message||'Could not update order','error');});
+}
+
+// ─── PRODUCTS ────────────────────────────────────────────────────────────────
+function loadAdminProducts(){
+  document.getElementById('products-loading').classList.remove('hidden');
+  document.getElementById('products-table-wrap').classList.add('hidden');
+
+  apiFetch('/api/admin/products?limit=50')
+  .then(function(data){
+    document.getElementById('products-loading').classList.add('hidden');
+    document.getElementById('products-table-wrap').classList.remove('hidden');
+    var products=data.products||[];
+    document.getElementById('products-tbody').innerHTML=products.map(function(p){
+      var inv=p.inventory||[];
+      var stock=inv.reduce(function(s,i){return s+(i.quantity||0);},0);
+      var low=stock>0&&stock<=5;
+      var oos=stock===0;
+      return'<tr>'+
+        '<td><p class="font-medium text-sm text-[#181c1f]">'+p.name+'</p><p class="text-xs text-[#5c5f61]">'+p.slug+'</p></td>'+
+        '<td class="font-[\'JetBrains_Mono\'] text-xs text-[#5c5f61]">'+(p.sku||'—')+'</td>'+
+        '<td class="font-semibold text-sm">'+fmt(p.price)+'</td>'+
+        '<td class="text-sm"><span class="'+(oos?'text-red-600 font-semibold':low?'text-amber-600 font-medium':'text-green-700')+'">'+stock+' units'+(oos?' — OUT OF STOCK':low?' — low':'')+'</span></td>'+
+        '<td><span class="badge '+(p.status==='active'?'badge-confirmed':'badge-pending')+'">'+p.status+'</span></td>'+
+        '<td><button onclick="openProductModal(\''+p.id+'\','+p.price+',\''+p.status+'\')" class="text-xs bg-[#f0f4f7] hover:bg-[#e8f0f4] text-[#006686] font-medium px-3 py-1.5 rounded-lg transition-colors">Edit</button></td>'+
+      '</tr>';
+    }).join('')||'<tr><td colspan="6" class="text-center text-[#5c5f61] py-8">No products found</td></tr>';
+  })
+  .catch(function(){
+    document.getElementById('products-loading').innerHTML='<p class="text-red-600 text-sm text-center">Could not load products.</p>';
+  });
+}
+
+function openProductModal(id,price,status){
+  editingProductId=id;
+  document.getElementById('prod-price').value=price;
+  document.getElementById('prod-status').value=status;
+  document.getElementById('product-modal').style.display='flex';
+}
+
+function saveProductUpdate(){
+  if(!editingProductId)return;
+  var body={price:parseFloat(document.getElementById('prod-price').value),status:document.getElementById('prod-status').value};
+  apiFetch('/api/admin/products/'+editingProductId,{method:'PATCH',body:JSON.stringify(body)})
+  .then(function(){closeModal();loadAdminProducts();showToast('Product updated');})
+  .catch(function(err){showToast(err.message||'Could not update product','error');});
+}
+
+// ─── CUSTOMERS ───────────────────────────────────────────────────────────────
+function loadCustomers(){
+  document.getElementById('customers-loading').classList.remove('hidden');
+  document.getElementById('customers-table-wrap').classList.add('hidden');
+
+  apiFetch('/api/admin/customers')
+  .then(function(data){
+    document.getElementById('customers-loading').classList.add('hidden');
+    document.getElementById('customers-table-wrap').classList.remove('hidden');
+    var customers=data.customers||[];
+    document.getElementById('customers-tbody').innerHTML=customers.map(function(c){
+      return'<tr>'+
+        '<td class="font-medium text-sm">'+(c.full_name||'—')+'</td>'+
+        '<td class="text-sm text-[#5c5f61]">'+(c.email||'—')+'</td>'+
+        '<td class="text-sm">'+(c.order_count||0)+'</td>'+
+        '<td class="font-semibold text-sm text-[#006686]">'+fmt(c.total_spent||0)+'</td>'+
+        '<td class="text-xs text-[#5c5f61]">'+fmtDate(c.created_at)+'</td>'+
+      '</tr>';
+    }).join('')||'<tr><td colspan="5" class="text-center text-[#5c5f61] py-8">No customers yet</td></tr>';
+  })
+  .catch(function(){
+    document.getElementById('customers-loading').innerHTML='<p class="text-red-600 text-sm text-center">Could not load customers.</p>';
+  });
+}
+
+// ─── REVIEWS ─────────────────────────────────────────────────────────────────
+function loadReviews(){
+  document.getElementById('reviews-loading').classList.remove('hidden');
+  document.getElementById('reviews-list').innerHTML='';
+
+  apiFetch('/api/admin/reviews')
+  .then(function(data){
+    document.getElementById('reviews-loading').classList.add('hidden');
+    var reviews=data.reviews||[];
+    if(reviews.length===0){document.getElementById('reviews-list').innerHTML='<p class="text-[#5c5f61] text-sm text-center py-12">No reviews</p>';return;}
+    document.getElementById('reviews-list').innerHTML=reviews.map(function(r){
+      return'<div class="bg-white border border-[#e5e8ec] rounded-2xl p-5">'+
+        '<div class="flex items-start justify-between gap-4">'+
+          '<div class="flex-1">'+
+            '<div class="flex items-center gap-2 mb-1">'+
+              '<span class="font-medium text-sm text-[#181c1f]">'+(r.profile?.full_name||'Anonymous')+'</span>'+
+              '<span class="text-amber-400">'+'★'.repeat(r.rating||0)+'☆'.repeat(5-(r.rating||0))+'</span>'+
+              (r.is_published?'<span class="badge badge-shipped">Published</span>':'<span class="badge badge-pending">Pending</span>')+
+            '</div>'+
+            '<p class="text-sm text-[#181c1f] font-medium mb-1">'+(r.title||'')+'</p>'+
+            '<p class="text-sm text-[#5c5f61] font-light leading-relaxed">'+(r.body||'')+'</p>'+
+            '<p class="text-xs text-[#bec8ce] mt-2">Product: '+(r.product?.name||r.product_id||'—')+' · '+fmtDate(r.created_at)+'</p>'+
+          '</div>'+
+          '<div class="flex gap-2 flex-shrink-0">'+
+            (!r.is_published?'<button onclick="moderateReview(\''+r.id+'\',true)" class="text-xs bg-green-50 text-green-700 font-medium px-3 py-1.5 rounded-lg hover:bg-green-100 transition-colors">Publish</button>':'')+
+            (r.is_published?'<button onclick="moderateReview(\''+r.id+'\',false)" class="text-xs bg-amber-50 text-amber-700 font-medium px-3 py-1.5 rounded-lg hover:bg-amber-100 transition-colors">Unpublish</button>':'')+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  })
+  .catch(function(){
+    document.getElementById('reviews-loading').innerHTML='<p class="text-red-600 text-sm text-center">Could not load reviews.</p>';
+  });
+}
+
+function moderateReview(id,publish){
+  apiFetch('/api/admin/reviews/'+id,{method:'PATCH',body:JSON.stringify({is_published:publish})})
+  .then(function(){loadReviews();showToast(publish?'Review published':'Review unpublished');})
+  .catch(function(err){showToast(err.message||'Could not update review','error');});
+}
+
+function showToast(msg,type){
+  var t=document.createElement('div');
+  t.textContent=msg;
+  var bg=type==='error'?'#ba1a1a':'#006686';
+  t.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;padding:12px 20px;border-radius:.875rem;font-family:Inter,sans-serif;font-size:14px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.15);transition:opacity .3s;pointer-events:none;background:'+bg+';color:#fff;';
+  document.body.appendChild(t);
+  setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},300);},3000);
+}
+
+document.getElementById('order-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('product-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+init();
+</script>
+</body>
+</html>

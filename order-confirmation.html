@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Confirmed | Dane Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;vertical-align:middle}
+  @keyframes checkDraw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+  @keyframes circleExpand{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+  .check-circle{animation:circleExpand .4s cubic-bezier(.34,1.56,.64,1) forwards}
+  .check-path{stroke-dasharray:100;stroke-dashoffset:100;animation:checkDraw .5s ease .3s forwards}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .fade-up{opacity:0;animation:fadeUp .6s ease forwards}
+  .fade-up:nth-child(1){animation-delay:.2s}
+  .fade-up:nth-child(2){animation-delay:.4s}
+  .fade-up:nth-child(3){animation-delay:.6s}
+  .spinner{width:32px;height:32px;border:3px solid #e5e8ec;border-top-color:#006686;border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+<script src="config.js"></script>
+</head>
+<body class="bg-[#f7fafd] text-[#181c1f] font-['Inter'] antialiased">
+
+<!-- Nav -->
+<nav class="border-b border-[#e5e8ec] bg-white">
+  <div class="max-w-[800px] mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="index.html" class="font-['Plus_Jakarta_Sans'] text-xl font-bold text-[#181c1f]">Dane Design</a>
+  </div>
+</nav>
+
+<div class="max-w-[800px] mx-auto px-6 py-12">
+
+  <!-- Loading state -->
+  <div id="loading" class="text-center py-20">
+    <div class="spinner mx-auto mb-4"></div>
+    <p class="text-[#5c5f61] font-light">Confirming your order…</p>
+  </div>
+
+  <!-- Error state -->
+  <div id="error-state" class="hidden bg-white border border-[#e5e8ec] rounded-2xl p-12 text-center">
+    <span class="material-symbols-outlined text-amber-500 text-5xl block mb-4">warning</span>
+    <h2 class="font-['Plus_Jakarta_Sans'] text-2xl font-semibold text-[#181c1f] mb-3">Order under review</h2>
+    <p class="text-[#5c5f61] font-light mb-6 max-w-sm mx-auto">Your payment may be processing. Check your email for confirmation, or view your orders in your account.</p>
+    <a href="account.html?tab=orders" class="bg-[#006686] text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity inline-block">View Orders</a>
+    <p class="mt-4"><a href="index.html" class="text-sm text-[#5c5f61] hover:text-[#006686]">← Return to shop</a></p>
+  </div>
+
+  <!-- Success state -->
+  <div id="success-state" class="hidden">
+
+    <!-- Check animation -->
+    <div class="text-center mb-10 fade-up">
+      <svg width="80" height="80" viewBox="0 0 80 80" class="mx-auto check-circle">
+        <circle cx="40" cy="40" r="36" fill="#e8f5e9" stroke="#006686" stroke-width="2"/>
+        <path class="check-path" d="M24 40 L36 52 L56 28" fill="none" stroke="#006686" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1 class="font-['Plus_Jakarta_Sans'] text-3xl font-bold text-[#181c1f] mt-5 mb-2">Order Confirmed</h1>
+      <p class="text-[#5c5f61] font-light">Thank you for your order. A confirmation has been sent to your email.</p>
+    </div>
+
+    <!-- Order card -->
+    <div id="order-card" class="bg-white border border-[#e5e8ec] rounded-2xl p-8 mb-6 fade-up">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+        <div>
+          <p class="text-xs text-[#5c5f61] uppercase tracking-wider mb-1">Order number</p>
+          <p id="order-number" class="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-[#006686]"></p>
+        </div>
+        <div class="text-right">
+          <p class="text-xs text-[#5c5f61] uppercase tracking-wider mb-1">Order date</p>
+          <p id="order-date" class="font-medium text-[#181c1f]"></p>
+        </div>
+      </div>
+
+      <!-- Status timeline -->
+      <div class="bg-[#f7fafd] rounded-xl p-5 mb-6">
+        <p class="text-xs text-[#5c5f61] uppercase tracking-wider mb-3">Order status</p>
+        <div class="flex items-start gap-4">
+          <div class="flex flex-col items-center">
+            <div class="w-7 h-7 rounded-full bg-[#006686] flex items-center justify-center"><span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">check_circle</span></div>
+            <div class="w-0.5 bg-[#006686] h-6 mt-1"></div>
+          </div>
+          <div class="flex-1 pb-4">
+            <p class="font-semibold text-[#181c1f] text-sm">Payment confirmed</p>
+            <p class="text-xs text-[#5c5f61]">Your payment has been processed securely.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="flex flex-col items-center">
+            <div class="w-7 h-7 rounded-full bg-[#f7fafd] border-2 border-[#bec8ce] flex items-center justify-center"><span class="text-xs text-[#5c5f61] font-bold">2</span></div>
+            <div class="w-0.5 bg-[#e5e8ec] h-6 mt-1"></div>
+          </div>
+          <div class="flex-1 pb-4">
+            <p class="font-medium text-[#5c5f61] text-sm">In production</p>
+            <p class="text-xs text-[#bec8ce]">8–12 weeks lead time</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-7 h-7 rounded-full bg-[#f7fafd] border-2 border-[#bec8ce] flex items-center justify-center flex-shrink-0"><span class="text-xs text-[#5c5f61] font-bold">3</span></div>
+          <div>
+            <p class="font-medium text-[#5c5f61] text-sm">White-glove delivery</p>
+            <p class="text-xs text-[#bec8ce]">Assembly & placement included</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div>
+        <p class="text-xs text-[#5c5f61] uppercase tracking-wider mb-3">Items ordered</p>
+        <div id="order-items" class="space-y-3 mb-5"></div>
+      </div>
+
+      <!-- Totals -->
+      <div class="border-t border-[#e5e8ec] pt-4 space-y-2">
+        <div class="flex justify-between text-sm text-[#5c5f61]">
+          <span>Subtotal</span>
+          <span id="conf-subtotal"></span>
+        </div>
+        <div id="conf-discount-row" class="flex justify-between text-sm text-green-700 hidden">
+          <span>Discount</span>
+          <span id="conf-discount"></span>
+        </div>
+        <div class="flex justify-between text-sm text-[#5c5f61]">
+          <span>Shipping</span>
+          <span id="conf-shipping"></span>
+        </div>
+        <div class="flex justify-between font-semibold text-[#181c1f] pt-2 border-t border-[#e5e8ec]">
+          <span class="font-['Plus_Jakarta_Sans']">Total paid</span>
+          <span id="conf-total" class="text-[#006686]"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shipping + Account CTAs -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 fade-up">
+      <div class="bg-white border border-[#e5e8ec] rounded-2xl p-6">
+        <span class="material-symbols-outlined text-[#006686] text-2xl block mb-2">local_shipping</span>
+        <h3 class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f] mb-1">Shipping details</h3>
+        <div id="conf-shipping-addr" class="text-sm text-[#5c5f61] leading-relaxed"></div>
+      </div>
+      <div class="bg-white border border-[#e5e8ec] rounded-2xl p-6">
+        <span class="material-symbols-outlined text-[#006686] text-2xl block mb-2">notifications</span>
+        <h3 class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f] mb-1">What happens next?</h3>
+        <ul class="text-sm text-[#5c5f61] space-y-1">
+          <li>• Production updates by email</li>
+          <li>• Tracking number when shipped</li>
+          <li>• Our team will call to schedule delivery</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="flex flex-col sm:flex-row gap-3 justify-center fade-up">
+      <a href="account.html?tab=orders" class="bg-[#006686] text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity text-center">View My Orders</a>
+      <a href="index.html" class="bg-white border border-[#e5e8ec] text-[#181c1f] font-medium px-8 py-3 rounded-full hover:border-[#006686] transition-colors text-center">Continue Shopping</a>
+    </div>
+
+  </div><!-- /success -->
+</div>
+
+<script>
+var BACKEND_URL = window.DANE_CONFIG?.backendUrl || 'http://localhost:3001';
+
+function fmt(n){return'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function fmtDate(s){return new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});}
+
+function getToken(){
+  try{var s=JSON.parse(localStorage.getItem('dane-session')||'null');return s&&s.access_token||null;}catch(e){return null;}
+}
+
+function showSuccess(order){
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('success-state').classList.remove('hidden');
+
+  document.getElementById('order-number').textContent=order.order_number||'—';
+  document.getElementById('order-date').textContent=fmtDate(order.created_at);
+
+  // Items
+  var items=order.order_items||[];
+  document.getElementById('order-items').innerHTML=items.map(function(item){
+    return'<div class="flex items-center justify-between py-2 border-b border-[#f7fafd] last:border-0">'+
+      '<div>'+
+        '<p class="text-sm font-medium text-[#181c1f]">'+(item.product_name||'Item')+'</p>'+
+        '<p class="text-xs text-[#5c5f61]">Qty: '+item.quantity+'</p>'+
+      '</div>'+
+      '<p class="text-sm font-semibold text-[#181c1f]">'+fmt(item.unit_price*item.quantity)+'</p>'+
+    '</div>';
+  }).join('');
+
+  // Totals
+  var subtotal=order.subtotal_amount||0;
+  var discount=order.discount_amount||0;
+  var shipping=order.shipping_amount||0;
+  var total=order.total_amount||0;
+  document.getElementById('conf-subtotal').textContent=fmt(subtotal);
+  document.getElementById('conf-shipping').textContent=shipping===0?'Free':fmt(shipping);
+  document.getElementById('conf-total').textContent=fmt(total);
+  if(discount>0){
+    document.getElementById('conf-discount-row').classList.remove('hidden');
+    document.getElementById('conf-discount').textContent='-'+fmt(discount);
+  }
+
+  // Shipping address
+  var addr=order.shipping_address||{};
+  document.getElementById('conf-shipping-addr').innerHTML=[
+    addr.full_name?'<strong>'+addr.full_name+'</strong>':'',
+    addr.line1,
+    addr.line2,
+    [addr.city,addr.state,addr.postal_code].filter(Boolean).join(', '),
+    addr.country
+  ].filter(Boolean).join('<br>');
+
+  // Clear cart on success
+  localStorage.removeItem('dane-cart');
+  // Update cart badge
+  try{var ev=new Event('cart-updated');window.dispatchEvent(ev);}catch(e){}
+}
+
+function init(){
+  var params=new URLSearchParams(window.location.search);
+  var sessionId=params.get('session_id');
+
+  if(!sessionId){
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('error-state').classList.remove('hidden');
+    return;
+  }
+
+  var token=getToken();
+  if(!token){
+    // Webhook may not have fired yet; try polling briefly
+    document.getElementById('loading').querySelector('p').textContent='Confirming your order…';
+  }
+
+  function attemptFetch(attempts){
+    var headers={'Content-Type':'application/json'};
+    if(token)headers['Authorization']='Bearer '+token;
+
+    fetch(BACKEND_URL+'/api/payments/verify-session?session_id='+encodeURIComponent(sessionId),{headers:headers})
+    .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d};});})
+    .then(function(r){
+      if(r.ok&&r.d.order){
+        showSuccess(r.d.order);
+      }else if(attempts>0){
+        // Webhook may be slightly delayed — retry
+        setTimeout(function(){attemptFetch(attempts-1);},2000);
+      }else{
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+      }
+    })
+    .catch(function(){
+      if(attempts>0){
+        setTimeout(function(){attemptFetch(attempts-1);},2000);
+      }else{
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+      }
+    });
+  }
+
+  attemptFetch(4); // retry up to 4 times (8s total)
+}
+
+init();
+</script>
+</body>
+</html>

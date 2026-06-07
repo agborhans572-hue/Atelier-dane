@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout | Dane Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;vertical-align:middle}
+  .step-active .step-dot{background:#006686;border-color:#006686;color:#fff}
+  .step-done  .step-dot{background:#006686;border-color:#006686;color:#fff}
+  .step-line-done{background:#006686}
+  .field-wrap input,.field-wrap select,.field-wrap textarea{
+    width:100%;border:1px solid #bec8ce;border-radius:.75rem;padding:.75rem 1rem;
+    font-family:Inter,sans-serif;font-size:.9375rem;color:#181c1f;outline:none;
+    transition:border-color .2s;background:#fff;
+  }
+  .field-wrap input:focus,.field-wrap select:focus,.field-wrap textarea:focus{border-color:#006686;box-shadow:0 0 0 3px rgba(0,102,134,.1)}
+  .field-wrap label{display:block;font-family:Inter,sans-serif;font-size:.6875rem;font-weight:600;color:#5c5f61;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem}
+  #overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;display:none}
+  .spinner{width:40px;height:40px;border:3px solid #f1f4f7;border-top-color:#006686;border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+<script src="config.js"></script>
+</head>
+<body class="bg-[#f7fafd] text-[#181c1f] font-['Inter'] antialiased">
+
+<!-- Loading overlay -->
+<div id="overlay"><div style="background:#fff;border-radius:1.5rem;padding:2rem 3rem;display:flex;flex-direction:column;align-items:center;gap:1rem;"><div class="spinner"></div><p style="font-family:Inter,sans-serif;font-size:.875rem;color:#5c5f61;">Redirecting to secure payment…</p></div></div>
+
+<!-- Nav -->
+<nav class="border-b border-[#e5e8ec] bg-white">
+  <div class="max-w-[1100px] mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="index.html" class="font-['Plus_Jakarta_Sans'] text-xl font-bold text-[#181c1f]">Dane Design</a>
+    <div class="flex items-center gap-2 text-sm text-[#5c5f61]">
+      <span class="material-symbols-outlined text-[#006686] text-base">lock</span>
+      Secure Checkout
+    </div>
+  </div>
+</nav>
+
+<!-- Steps indicator -->
+<div class="border-b border-[#e5e8ec] bg-white">
+  <div class="max-w-[1100px] mx-auto px-6 py-4">
+    <div class="flex items-center gap-0 justify-center max-w-sm mx-auto">
+      <div id="step-1-indicator" class="flex flex-col items-center step-active">
+        <div class="step-dot w-7 h-7 rounded-full border-2 border-[#bec8ce] flex items-center justify-content:center text-xs font-bold flex items-center justify-center">1</div>
+        <span class="text-[10px] mt-1 font-medium text-[#006686]">Cart</span>
+      </div>
+      <div class="flex-1 h-0.5 bg-[#e5e8ec] mx-2 step-line" id="line-1"></div>
+      <div id="step-2-indicator" class="flex flex-col items-center">
+        <div class="step-dot w-7 h-7 rounded-full border-2 border-[#bec8ce] flex items-center justify-center text-xs font-bold text-[#5c5f61]">2</div>
+        <span class="text-[10px] mt-1 text-[#5c5f61]">Shipping</span>
+      </div>
+      <div class="flex-1 h-0.5 bg-[#e5e8ec] mx-2 step-line" id="line-2"></div>
+      <div id="step-3-indicator" class="flex flex-col items-center">
+        <div class="step-dot w-7 h-7 rounded-full border-2 border-[#bec8ce] flex items-center justify-center text-xs font-bold text-[#5c5f61]">3</div>
+        <span class="text-[10px] mt-1 text-[#5c5f61]">Payment</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-[1100px] mx-auto px-6 py-10">
+  <!-- Removed: auth required gate — guest checkout now supported -->
+
+  <!-- Empty cart -->
+  <div id="empty-cart" class="hidden bg-white border border-[#e5e8ec] rounded-2xl p-10 text-center max-w-md mx-auto">
+    <span class="material-symbols-outlined text-[#bec8ce] text-5xl block mb-4">shopping_bag</span>
+    <h2 class="font-['Plus_Jakarta_Sans'] text-2xl font-semibold text-[#181c1f] mb-3">Your cart is empty</h2>
+    <p class="text-[#5c5f61] font-light mb-6">Explore the collection and add something you love.</p>
+    <a href="index.html" class="bg-[#006686] text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity inline-block">Explore Collection</a>
+  </div>
+
+  <!-- Checkout layout -->
+  <div id="checkout-layout" class="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-10 hidden">
+
+    <!-- Left: Steps -->
+    <div>
+
+      <!-- Step 1: Cart Review -->
+      <section id="step-1" class="bg-white border border-[#e5e8ec] rounded-2xl p-8 mb-6">
+        <h2 class="font-['Plus_Jakarta_Sans'] text-xl font-semibold text-[#181c1f] mb-6">Your Cart</h2>
+        <div id="cart-items-list" class="space-y-4 mb-6"></div>
+        <!-- Coupon -->
+        <div class="border-t border-[#e5e8ec] pt-5">
+          <div class="flex gap-3">
+            <input id="coupon-input" type="text" placeholder="Coupon code" class="flex-1 border border-[#bec8ce] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#006686]"/>
+            <button onclick="applyCoupon()" class="bg-[#181c1f] text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:opacity-80 transition-opacity">Apply</button>
+          </div>
+          <p id="coupon-msg" class="text-sm mt-2 hidden"></p>
+        </div>
+        <!-- Guest email — shown only when not signed in -->
+        <div id="guest-email-wrap" class="border-t border-[#e5e8ec] pt-5 mt-5 hidden">
+          <p class="text-xs text-[#5c5f61] uppercase tracking-wider font-semibold mb-3">Contact information</p>
+          <div class="field-wrap">
+            <label>Email address *</label>
+            <input type="email" id="guest-email" placeholder="you@example.com" class="w-full border border-[#bec8ce] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#006686]"/>
+          </div>
+          <p class="text-xs text-[#5c5f61] mt-2">Order confirmation will be sent to this address. <button onclick="document.querySelector('[aria-label=Account]')?.click()" class="text-[#006686] hover:underline">Sign in</button> to track orders.</p>
+        </div>
+        <div class="mt-5 flex justify-end">
+          <button onclick="goToStep(2)" class="bg-[#006686] text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity flex items-center gap-2">Continue to Shipping <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+        </div>
+      </section>
+
+      <!-- Step 2: Shipping -->
+      <section id="step-2" class="bg-white border border-[#e5e8ec] rounded-2xl p-8 mb-6 hidden">
+        <h2 class="font-['Plus_Jakarta_Sans'] text-xl font-semibold text-[#181c1f] mb-6">Shipping Address</h2>
+        <form id="shipping-form" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="field-wrap"><label>Full name *</label><input type="text" id="ship-name" required placeholder="Name on delivery"/></div>
+            <div class="field-wrap"><label>Phone</label><input type="tel" id="ship-phone" placeholder="+1 555 000 0000"/></div>
+          </div>
+          <div class="field-wrap"><label>Address line 1 *</label><input type="text" id="ship-line1" required placeholder="Street and number"/></div>
+          <div class="field-wrap"><label>Address line 2</label><input type="text" id="ship-line2" placeholder="Apartment, suite, etc."/></div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="field-wrap sm:col-span-1"><label>City *</label><input type="text" id="ship-city" required placeholder="City"/></div>
+            <div class="field-wrap"><label>State / County</label><input type="text" id="ship-state" placeholder="State"/></div>
+            <div class="field-wrap"><label>Postal code *</label><input type="text" id="ship-postal" required placeholder="Postal code"/></div>
+          </div>
+          <div class="field-wrap">
+            <label>Country *</label>
+            <select id="ship-country" required>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="DK" selected>Denmark</option>
+              <option value="SE">Sweden</option>
+              <option value="NO">Norway</option>
+              <option value="FI">Finland</option>
+              <option value="DE">Germany</option>
+              <option value="FR">France</option>
+              <option value="NL">Netherlands</option>
+              <option value="BE">Belgium</option>
+              <option value="CH">Switzerland</option>
+              <option value="AT">Austria</option>
+            </select>
+          </div>
+          <div id="save-address-wrap" class="flex items-center gap-2 mt-2 hidden">
+            <input type="checkbox" id="save-address" class="rounded" checked/>
+            <label for="save-address" class="text-sm text-[#5c5f61]">Save this address to my account</label>
+          </div>
+        </form>
+        <div class="mt-6 flex justify-between items-center">
+          <button onclick="goToStep(1)" class="text-sm text-[#5c5f61] flex items-center gap-1 hover:text-[#006686] transition-colors"><span class="material-symbols-outlined text-sm">arrow_back</span> Back</button>
+          <button onclick="submitShipping()" class="bg-[#006686] text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity flex items-center gap-2">Continue to Payment <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+        </div>
+      </section>
+
+      <!-- Step 3: Review & Pay -->
+      <section id="step-3" class="bg-white border border-[#e5e8ec] rounded-2xl p-8 mb-6 hidden">
+        <h2 class="font-['Plus_Jakarta_Sans'] text-xl font-semibold text-[#181c1f] mb-6">Review & Pay</h2>
+        <!-- Shipping summary -->
+        <div class="bg-[#f7fafd] rounded-xl p-4 mb-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs text-[#5c5f61] uppercase tracking-wider mb-1">Shipping to</p>
+              <p id="ship-summary-name" class="font-medium text-[#181c1f] text-sm"></p>
+              <p id="ship-summary-addr" class="text-sm text-[#5c5f61]"></p>
+            </div>
+            <button onclick="goToStep(2)" class="text-xs text-[#006686] hover:underline">Edit</button>
+          </div>
+        </div>
+        <!-- Trust signals -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="text-center p-3 border border-[#e5e8ec] rounded-xl">
+            <span class="material-symbols-outlined text-[#006686] text-xl block mb-1">lock</span>
+            <p class="text-xs text-[#5c5f61]">256-bit SSL</p>
+          </div>
+          <div class="text-center p-3 border border-[#e5e8ec] rounded-xl">
+            <span class="material-symbols-outlined text-[#006686] text-xl block mb-1">verified</span>
+            <p class="text-xs text-[#5c5f61]">5-yr warranty</p>
+          </div>
+          <div class="text-center p-3 border border-[#e5e8ec] rounded-xl">
+            <span class="material-symbols-outlined text-[#006686] text-xl block mb-1">local_shipping</span>
+            <p class="text-xs text-[#5c5f61]">White-glove delivery</p>
+          </div>
+        </div>
+        <p class="text-xs text-[#5c5f61] leading-relaxed mb-6">You will be redirected to Stripe's secure payment page. Your card details are never stored on our servers.</p>
+        <div class="flex justify-between items-center">
+          <button onclick="goToStep(2)" class="text-sm text-[#5c5f61] flex items-center gap-1 hover:text-[#006686] transition-colors"><span class="material-symbols-outlined text-sm">arrow_back</span> Back</button>
+          <button onclick="submitPayment()" id="pay-btn" class="bg-[#006686] text-white font-semibold px-10 py-3.5 rounded-full hover:opacity-90 transition-opacity flex items-center gap-2 shadow-[0_8px_20px_rgba(0,102,134,.25)]">
+            <span class="material-symbols-outlined text-base">lock</span>
+            Place Order & Pay
+          </button>
+        </div>
+      </section>
+
+    </div><!-- /left -->
+
+    <!-- Right: Order Summary -->
+    <aside class="space-y-4">
+      <div class="bg-white border border-[#e5e8ec] rounded-2xl p-6 sticky top-6">
+        <h3 class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f] mb-4">Order Summary</h3>
+        <div id="summary-items" class="space-y-3 mb-4 border-b border-[#e5e8ec] pb-4"></div>
+        <div class="space-y-2 text-sm mb-4">
+          <div class="flex justify-between text-[#5c5f61]">
+            <span>Subtotal</span>
+            <span id="summary-subtotal">$0</span>
+          </div>
+          <div id="summary-discount-row" class="flex justify-between text-green-700 hidden">
+            <span>Discount (<span id="summary-coupon-label"></span>)</span>
+            <span id="summary-discount">-$0</span>
+          </div>
+          <div class="flex justify-between text-[#5c5f61]">
+            <span>Shipping</span>
+            <span id="summary-shipping">Calculated at checkout</span>
+          </div>
+        </div>
+        <div class="flex justify-between font-semibold text-[#181c1f] pt-3 border-t border-[#e5e8ec]">
+          <span class="font-['Plus_Jakarta_Sans']">Total</span>
+          <span id="summary-total" class="text-[#006686] text-lg">$0</span>
+        </div>
+        <p class="text-xs text-[#5c5f61] mt-3 leading-relaxed">All furniture is made to order. Lead time is approximately 8–12 weeks. You will receive production updates by email.</p>
+      </div>
+      <div class="bg-white border border-[#e5e8ec] rounded-2xl p-5">
+        <p class="text-xs text-[#5c5f61] text-center leading-relaxed">Questions? <a href="contact.html" class="text-[#006686] hover:underline">Contact us</a> or call <a href="tel:+4512345678" class="text-[#006686] hover:underline">+45 12 34 56 78</a></p>
+      </div>
+    </aside>
+
+  </div><!-- /checkout-layout -->
+</div>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+var BACKEND_URL = window.DANE_CONFIG?.backendUrl || 'http://localhost:3001';
+var SUPA_URL    = 'https://owmddpatncdmjhaxdsqq.supabase.co';
+var SUPA_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93bWRkcGF0bmNkbWpoYXhkc3FxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NTc1NDYsImV4cCI6MjA5NjMzMzU0Nn0.IYAJj8f1DM5pycg5sfZrlUc_ZKS3z3SrDU3sJ8crtj4';
+
+// Product catalog (must match app.js — source of truth until all pages fetch from API)
+var PRODUCTS = [
+  {id:'aura-lounge-chair',name:'Aura Lounge Chair',price:1250,material:'Light Ash & Bouclé',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuDofLJ9Lta216HrW6PKjVFpsojAaupbTaEWNjNaakeaytxwb7tiKkn9xM9X9LpPC-ICySP-JexkDLVS0j_zWvEbRseOfRWnY1aAeQ0Fyw2t4wONsRaWT4TcW0O8XPRZz0DHHPAODGEdMD3AfgvJD12jqC_kxyTCgEndVunnAtlIW12kNJr5k-4Zg0XVcxVsEbPpHsZoxbEqatIhmxQfOPpuj8tgFrMhfqQuGN-QJoSo8ByP-gudIZBNiHWFyTlh2Awj_y_A6KNp_aA'},
+  {id:'freya-lounge-chair',name:'Freya Lounge Chair',price:1850,material:'Solid Ash, Bouclé Wool',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuCoBzom2bE46g4uzwehXy2D7IvICB5u7zucRBTQmrKepQKCZMlKvtVofA_syFWIvtJvuO-lRI-jOenZh2VFVHlu90eAOP5yTD7hs-_sYHdgLkMEb3NcmDP4Sot9yPU7-mNz7m_7-tvUCwZ7byg5QHPUyvT0dnR8kJsdu_o8gzG4jepY0DfrIIEaCSfJuDXMU30UXCjRMTo2vOmAOV1sNve7pLV-_v24e8irY1ezV6KRKv6WoJ3keDpCkqzLZzE4AXJpN3gM-0WU8D4'},
+  {id:'odin-oak-stool',name:'Odin Oak Stool',price:450,material:'Solid Blonde Oak',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuBh71N46M_NkHKnRcwXKChJEiQK57zi6YuZfxEDVzVq6bW-J2h33-gY6dsOUwk73b_AEhtm6etz-s_Ir0y2S9ZDhF_psMHbS4BB1vt_s1hgiIgxwQcL0VlV_3enZ58bhWBK11g_x8n0S8UJak4RY4WgI7X-Yn9shJGqqANQH0_B34H6zXIKxrhjZpa9letttW_Ze9tptYjpeqVXJpkOu7SnIrrEGBk6zzDRGPZKuXa79QMBHNTpWqzAE_pNYlnyRr6UZ7UUKWqTKVg'},
+  {id:'nordic-dining-chairs',name:'Nordic Dining Chairs',price:890,material:'Beech & Paper Cord (Set of 2)',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuCpcRKGog3ytue8hmi846vXdl467w7rJqD3xSN8bNfhbohK26UDY1iXNq5ThKEnZSjSxoqPun7X2s5q7leEK-HESuJ1BLQTP1ZsB5HcBmz_j4VsI8Uj9dsgFf_LimJsEptKzegOpT673y5PpWTKYy8oZ7tZWMuEcV-4xF5sqxGpZb7ramh2dIO7UgcCFa5er4nNz0VJ7zrUvQpu1fGXT0bfHCtFnB9_sziFkRioIYQbcd7F6O6KAbXYWy4pbfRy6g2lwxvsbx-hTG8'},
+  {id:'aura-floor-lamp',name:'Aura Floor Lamp',price:580,material:'Brushed Steel & Frosted Glass',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuDGD53iL_ENLzR3s2s8_lcsgIaQBkkqSCqEgjcielsF9Xe7YmczX5bc_rUv_Z0gs1SF8ioA5bdzO0LEw0N25lSESRNoVluJ53P4NN7fWAZIR9rDfX1STiatsFcs4Gj01eOpT_02jRumYU3ONszKETT5CZ-jgXFWdXrw1IoZ17YIKp2qvhfbGXOuVZu1fr9Of3QqylHm2g-T5WC1rXH_i60nTru89wHhejsF6om3tgLkfhV2feh9PpPJaHDBFb9sGfaQgt9Z5-_eRmQ'},
+  {id:'lumina-pendant',name:'Lumina Pendant',price:890,material:'Hand-spun Brass, Opal Glass',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuCr-MDoWNO1UnlybOf5tDTHc7VmykTLuGGrm9XbKUmOBy17KMcozHX_Xx0vidH3mbbrjNU0ezAKAqJy0DESuJrMS-ztIDTPF0kWmbdCR1X22ZhwhiGU9y41LwwYlJHiG404DUzOB6HFNMwcjPcR9tK4fTi9C8bKX3DJgMoo94fMs9488hpDLrgfb8GkAZcPioXT1rXFFifykpBDnU6Z9ickUktZ5gObQsBQZbtraFX3t0mnOqIvHOLh4CFLs-gntxIrwGDEZXrestg'},
+  {id:'vesper-wall-sconce',name:'Vesper Wall Sconce',price:185,material:'Powder Coated Aluminium',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuDP6ziSqnDYpuhuC9_ysJoFUDytpuzh0j3LpNtn5_oCtzlCyzqmT1aQ7E73RJ1-mfGXc2x3hYrMvpfnjSvr-j4PH3qsg12_E-bPSbzee6lzsl8LjKiMumweRXtW6xLOnxwJC_Qbnie3pRFtV1V7vH3fG69k6nQKA9L1lR-P5LvcYVjqmxRX_nLTpARVm6DmXx8lHSP2i_6E7CuBaqEylinfhE8BGKi83gTLaki-r_tVhpErhLwSykZAS09D4QjRW7rhjZX0wFyoDw4'},
+  {id:'lumen-desk-lamp',name:'Lumen Desk Lamp',price:320,material:'Matte Black Steel',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuC_tzFjJD5NK4tKBH6W3l6qiGpuu3Og6ADed5ErvfUkru9Ulkr0_VEZdhhUzP-WvutKHB0dUbbaEfNtnhxmP5a5AWb5tGtiWha-SjQWq9O9xUxM8fM6dW0-QXSfjelSKyhz43ct4mjSkvJlAIElxMQgP2f2AkOYVTYGNv5DSanllkN2rNL-yfVqq-odm1fX40zLSe0K-iCyzPwddvnfT4vLaTW-h8O8EbBd_6mqgs5hG7jqKLbe-gdxfEQcs8a18Q6agk'},
+  {id:'architects-desk',name:"The Architect's Desk",price:1250,material:'Solid Oak & Frosted Glass',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuAONb8hQwDOXFS3YTQsOlTVYwkd9Q8sbc6khXxgrDLhIsnh6iw1SvniHDGaLxOkue_GUh8DD_3bpxadZrI7qLbKYmqGyn6CnQtvQIKE-ekSgWzzFJ04bm0Ka-6lGZNimTT4JmL0_o0hDKFAoYLZEPI8v2spzpYG9jIdT3HIrbE9uqjQGknJviiAgBZCqNYlTHYgnUOEpo7QlGKxWxYOSsoV6IQukXuiVBpMvAAnZ9ZU-maHisqvZkVCwitgBhf-1IWtqAKZXg1PsTk'},
+  {id:'aura-side-table',name:'Aura Side Table',price:450,material:'Marble & Steel',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuC-ocVuPMfAmjA2G96M91xTSPncTZmySAdSxJBEAosL19eqCb1n6UMV1S9Ur9OQXx6DvjkdkOHfsn25UEVQEFfNyYEqFI4W9wZkxg1_GzO7coxmO_ZAxeUhcsdEsW85N1vMYOt6btHbEdGCsSzos2c1b8f1Zmic_vtLSroJJLDyYjpTbXU6yAZSbsgpbH6Wh7tLSZKRNeiOMP_Vuy3XMROItuCRFD6eYjYKju0ZI6e_KAhsb7cwk85jNLyXW304Sjk5xlrH2IwwiDk'},
+  {id:'levity-console',name:'Levity Console',price:890,material:'Walnut & Acrylic',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuBzuJ55FJkMkT-iZtXDpmGYPC6nAO2oxnWCm9a0JnAbYOKF6p2K3hDE1s-xax19WhZOsg2DE0SQLDq5A-ZAO67j6BvES0rqRgeOSYVTmtCNvkmtEfHjUN2qBqygY9YVjhTSvlQoGcIrnS-1owcXairnGGfv6aTAbimLYha9uzTAQcTgplBcxY01__xDLhYM_gKpURTP0Hg2jMZfaCNdvEa7-7nKXIgmKwexsmeIPIIZjjVpG5h_AC7rTD8WmTc4llpHC82nGg_yH1s'},
+  {id:'fjord-dining-table',name:'Fjord Dining Table',price:5800,material:'Solid Ash',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuDJcm7xuJY4nO0UaNzA8DqqlddWmnud8YvjE26NBqO4ZKlw1K1TRV-OtrRCCwKQSTsHWqstipqzTBqTGvQzdCcc-l66gJrHwXDprZ2PkG2P8hVpiZJ7Tx_ySl2aIUvdwTpxdMbLpcSkoAZAl-qhdTRnNTn3U0R6inozDUrGMt2E4iC_wlVDC4pfWBSHG470O1O6cWbUJ4ogi1VOEqgIVFPhT7Xz73fkUzNIvv6n4d0HFKaZ3AhkHFMW_mRsQWXT0Uwzkbj-LU17sFE'},
+  {id:'nordic-dining-set',name:'Nordic Dining Set',price:4800,material:'Solid Ash',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuALpNag2eHwVF1RBKAkqNItSHRvKuif0dPkJGPrpNNyUTz4hxRh49bgCD1yAVIJfSifCJmM9LxZpEMpZLaiz6THizFB1T5fk8Zsg0D_wVuOe9ZK2td2raRMf7LSr4OOk-NuXKOEL5i36LlmuPT1IlHIpbMIlxW8E7E4jFQ13FCyit1t2SGHrkFEFktIxhCoXZOBrHEMfnvuNe62rGlUBpnGVPzzIHyoWUfTlbUYgr_u9ZTxp9JiH4ykOVslISd-2ipgVNRMNQzonLE'},
+  {id:'fjord-sideboard',name:'Fjord Sideboard',price:3200,material:'Solid Oak & Fluted Glass',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuBI46ivevE32l_A9f2Kw-_pEncNLgy0r9Jz_xvAd9BC9AyuKGcVBhquNBb5fGs3wLKTYUwWhaQS5-zcCvVRqobZROGKFxfUSR0H4UwbjROELy8FyhcXnwvVjqDeGvzcN5o0ee1FCS95suLB_vNeY0RzfJbt0KX-VA5TaYdIYwNKQUSDgO9tWvrx4cikxfblcfpoefnxRXURDCAR2zKIb0I0OEo-RBRT27HCX5dJLp9POtaI2XXjSsV0wwvgqnOgcMvKHIcLV9JSBik'},
+  {id:'aero-shelving',name:'Aero Shelving',price:650,material:'Powder-coated Steel',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuAZmgnBeiEewaAFj16RRnYGafxni8YxXVYYsm_3Mg1_IJnkLDouOeW_NCu0vQ7l3utls_0UDBXRYM75nH3mLpW2jP1KIsUBb8E4Xogqagn4Gdgv75yDvPXcsUP-q83aj1oPFFVXGyZsOlZDSHVTvyth6fKDicP6ylmQi3QLk_i9mdV8qPzhkmDWvE8owRvqWKj2nvhJ-eGpWLhcxdEpfNp9jsOpqb4vAbip1rm_v4SwsZsrEmN0hncNrZ46kURHMXKntPcHIYCy-xk'},
+  {id:'horizon-console',name:'Horizon Console',price:1100,material:'Matte Lacquer & Stone',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuCmQx3DkF879es09gzSiyh7dFp78ce90Ad-6imKB0yQ-dKi0hk90LXvWDMeetgXv-cyil_Kh0Z2PB1iKnNDOL_YPHbSCBFUIcaXlgBxAxbbOz4-ua5TuWi7B1TNTsn2cBs-Sgt6jfqlZi3P1dUpaqLJnoO4gmyXzh_vE-CDXuGtqagEA9ePoImQp5J7711qex9l9CDqK-j_jq_ysdP82JlUG2MauqU7LsfVUCgc-1jtmmdthuQDGB5HJQydZCTGa-EOYadxUpAEOvw'},
+  {id:'rime-vase',name:'Rime Vase',price:120,material:'Ceramic',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuBKgcCFcMn-gWLj4qsAc7UlmH_OwsQDVqDZfOC9OYl62Nd5ZfsZKn5X1gX0rAXw56iWWDg6x-z7EzHXxgikxdq3-15ZxnNVTPZgI0ZmX4iL6HIHEQKTAy5ji9SEhehfHOkYKzyGke4P8YWCIrOYJmQf6oCd2UCV1GJIWXTSY99-yRevxduXH-_K7XvRnu-KMJVEGxhp0MAQ6cvojimJxI76yZ08HCL1Ol8u9fYF90O2sZNM9C3jS4ykzCB1_CC-mlcEYo40ml5BK3Y'},
+  {id:'krono-clock',name:'Krono Clock',price:280,material:'Brass & Glass',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuDZEbn6-KlP5ocsG7rQLMUxvvoBueThrJswP4IaEvM8yet3wWEze9juchjFj8E4GiRUQUkiEb_X7caxA41z9mrLSPc9M27gNEbk24oBfiCbHfYWJA_IeSN90KUog-QTGmWXYefAwmq_ex9fhwZphrtxOVcQbuRLhqsHXX-ZPbgCtw8a4v50YoEprtXoAjEtQVZuvq5zCBmw19vd2P5Q71Zg0l8LdrJrMgQZdmGkzQX8F3JkJ7BmouYslSTfGc1wmlYoyaZPBTM5u9U'},
+  {id:'alpaca-throw',name:'Alpaca Throw',price:350,material:'Alpaca Wool',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuBDo9oLkyLD8zAnvCbHbYoYo8aew9MyQzw2t5km8sP2-owiXHX6W2Vp2QrjP8wb-2V5YTqioAyN5ohFfwK3lNl4HPydF6M9C9TXVoRlY14dZipqwVCqdL0_Pew2uWsw94JoBth8VBCa41vAfpqZBOsWhg9kFxxy_meGRk12REC_dlMVwOPA6s1ykZA40rUOcrA6_tztfwtKW8H_HPsYlu_lQtSmdlniGRX6xyQtxSnmGVz4Vfijg21NnAiAI0efydHCCA937QfPNPM'},
+  {id:'valet-tray',name:'Valet Tray',price:190,material:'Full-grain Leather',img:'https://lh3.googleusercontent.com/aida-public/AB6AXuAd77UYaP0yCZLAD5efocPtzkotaLX68A5S3v-jHL5uboM6NWqN_QhX9q-ibB40y9juhQRTppGm-tuZnQKp3zOc9Q3h_mMTFb5p5aBVvSd0lPK_YiYFEkuYphNO02ETnpJTLFqUrZN5ij8aIhCInvjCMFvn-bIF-4OKuX4NPIMJzLWX282oodKtCR4ar1jDlZODsEvBUMAf7wniv93Lr7MncoiZ6eAadJ7J5iJ8zTakvpUaoukdUCJ3vAfxXDoe-s_jdiHO74lOIWQ'},
+];
+
+var cart = [];
+var session = null;
+var coupon = null;
+var shippingAddress = null;
+var currentStep = 1;
+
+function fmt(n){return'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function getToken(){return session?.access_token||null;}
+
+function init(){
+  // Check for cancellation
+  var params=new URLSearchParams(window.location.search);
+  if(params.get('cancelled')==='true'){showToast('Payment cancelled. Your cart has been preserved.','#4B3D33');}
+
+  // Load session
+  try{var s=localStorage.getItem('dane-session');if(s)session=JSON.parse(s);}catch(e){}
+
+  // Load cart from localStorage
+  try{cart=JSON.parse(localStorage.getItem('dane-cart'))||[];}catch(e){cart=[];}
+
+  if(cart.length===0){
+    document.getElementById('empty-cart').classList.remove('hidden');
+    return;
+  }
+
+  // Show guest email field and hide save-address for non-logged-in users
+  if(!session||!session.user){
+    document.getElementById('guest-email-wrap').classList.remove('hidden');
+  } else {
+    document.getElementById('save-address-wrap').classList.remove('hidden');
+  }
+
+  document.getElementById('checkout-layout').classList.remove('hidden');
+  renderCartItems();
+  updateSummary();
+}
+
+function renderCartItems(){
+  var el=document.getElementById('cart-items-list');
+  el.innerHTML=cart.map(function(item){
+    var p=PRODUCTS.find(function(pr){return pr.id===item.id;});
+    if(!p)return'';
+    return'<div class="flex items-center gap-4 p-3 rounded-xl border border-[#e5e8ec]">'+
+      '<img src="'+p.img+'" class="w-14 h-14 object-cover rounded-xl flex-shrink-0" alt="'+p.name+'"/>'+
+      '<div class="flex-1 min-w-0">'+
+        '<p class="font-[\'Plus_Jakarta_Sans\'] font-semibold text-[#181c1f] text-sm truncate">'+p.name+'</p>'+
+        '<p class="text-xs text-[#5c5f61]">'+p.material+'</p>'+
+        '<div class="flex items-center gap-2 mt-1">'+
+          '<button onclick="changeQty(\''+p.id+'\','+(item.qty-1)+')" class="w-6 h-6 rounded-full border border-[#bec8ce] text-sm flex items-center justify-center hover:border-[#006686] transition-colors">−</button>'+
+          '<span class="text-sm font-semibold text-[#181c1f] min-w-[18px] text-center">'+item.qty+'</span>'+
+          '<button onclick="changeQty(\''+p.id+'\','+(item.qty+1)+')" class="w-6 h-6 rounded-full border border-[#bec8ce] text-sm flex items-center justify-center hover:border-[#006686] transition-colors">+</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="text-right">'+
+        '<p class="font-semibold text-[#006686] text-sm">'+fmt(p.price*item.qty)+'</p>'+
+        '<button onclick="removeItem(\''+p.id+'\')" class="text-xs text-[#bec8ce] hover:text-red-500 transition-colors mt-1">Remove</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  // Summary panel items
+  document.getElementById('summary-items').innerHTML=cart.map(function(item){
+    var p=PRODUCTS.find(function(pr){return pr.id===item.id;});
+    if(!p)return'';
+    return'<div class="flex justify-between text-sm">'+
+      '<span class="text-[#181c1f] truncate max-w-[180px]">'+p.name+' <span class="text-[#5c5f61]">×'+item.qty+'</span></span>'+
+      '<span class="font-medium text-[#181c1f] ml-2">'+fmt(p.price*item.qty)+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+function changeQty(id,qty){
+  if(qty<1){removeItem(id);return;}
+  var item=cart.find(function(i){return i.id===id;});
+  if(item)item.qty=qty;
+  localStorage.setItem('dane-cart',JSON.stringify(cart));
+  renderCartItems();
+  updateSummary();
+}
+
+function removeItem(id){
+  cart=cart.filter(function(i){return i.id!==id;});
+  localStorage.setItem('dane-cart',JSON.stringify(cart));
+  if(cart.length===0){
+    document.getElementById('checkout-layout').classList.add('hidden');
+    document.getElementById('empty-cart').classList.remove('hidden');
+    return;
+  }
+  renderCartItems();
+  updateSummary();
+}
+
+function getSubtotal(){
+  return cart.reduce(function(sum,item){
+    var p=PRODUCTS.find(function(pr){return pr.id===item.id;});
+    return sum+(p?p.price*item.qty:0);
+  },0);
+}
+
+function updateSummary(){
+  var sub=getSubtotal();
+  var disc=coupon?(coupon.type==='percentage'?(sub*coupon.value/100):coupon.value):0;
+  disc=Math.min(disc,sub);
+  var shipping=sub>=500?0:95;
+  var total=sub-disc+shipping;
+
+  document.getElementById('summary-subtotal').textContent=fmt(sub);
+  document.getElementById('summary-shipping').textContent=shipping===0?'Free':fmt(shipping);
+  document.getElementById('summary-total').textContent=fmt(total);
+
+  var discRow=document.getElementById('summary-discount-row');
+  if(coupon&&disc>0){
+    discRow.classList.remove('hidden');
+    document.getElementById('summary-coupon-label').textContent=coupon.code;
+    document.getElementById('summary-discount').textContent='-'+fmt(disc);
+  }else{
+    discRow.classList.add('hidden');
+  }
+}
+
+function applyCoupon(){
+  var code=document.getElementById('coupon-input').value.trim().toUpperCase();
+  var msgEl=document.getElementById('coupon-msg');
+  if(!code){msgEl.className='text-sm mt-2 text-red-600';msgEl.textContent='Please enter a code.';msgEl.classList.remove('hidden');return;}
+
+  msgEl.className='text-sm mt-2 text-[#5c5f61]';
+  msgEl.textContent='Checking…';
+  msgEl.classList.remove('hidden');
+
+  var couponHeaders={'Content-Type':'application/json'};
+  var t=getToken();if(t)couponHeaders['Authorization']='Bearer '+t;
+  fetch(BACKEND_URL+'/api/coupons/validate',{
+    method:'POST',
+    headers:couponHeaders,
+    body:JSON.stringify({code:code,order_total:getSubtotal()})
+  })
+  .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d};});})
+  .then(function(r){
+    if(!r.ok){
+      msgEl.className='text-sm mt-2 text-red-600';
+      msgEl.textContent=r.d.error||'Invalid coupon.';
+    }else{
+      coupon={id:r.d.coupon.id,code:r.d.coupon.code,type:r.d.coupon.type,value:r.d.coupon.value};
+      msgEl.className='text-sm mt-2 text-green-700';
+      msgEl.textContent='✓ Coupon applied — '+fmt(r.d.discount)+' off';
+      updateSummary();
+    }
+  })
+  .catch(function(){
+    msgEl.className='text-sm mt-2 text-red-600';
+    msgEl.textContent='Could not connect to server. Try again.';
+  });
+}
+
+function goToStep(n){
+  // Validate guest email before leaving step 1
+  if(n>1 && (!session||!session.user)){
+    var emailEl=document.getElementById('guest-email');
+    var email=emailEl?emailEl.value.trim():'';
+    if(!email||!email.includes('@')){
+      if(emailEl){emailEl.focus();emailEl.style.borderColor='#ba1a1a';}
+      showToast('Please enter a valid email address.','#ba1a1a');
+      return;
+    }
+    if(emailEl)emailEl.style.borderColor='';
+  }
+  [1,2,3].forEach(function(i){
+    document.getElementById('step-'+i).classList.add('hidden');
+    var ind=document.getElementById('step-'+i+'-indicator');
+    ind.classList.remove('step-active','step-done');
+    ind.querySelector('.step-dot').classList.remove('bg-[#006686]','border-[#006686]','text-white');
+    if(i<n){
+      ind.classList.add('step-done');
+      ind.querySelector('.step-dot').style.cssText='background:#006686;border-color:#006686;color:#fff;';
+    }else if(i===n){
+      ind.classList.add('step-active');
+      ind.querySelector('.step-dot').style.cssText='background:#006686;border-color:#006686;color:#fff;';
+    }else{
+      ind.querySelector('.step-dot').style.cssText='';
+    }
+  });
+  document.getElementById('step-'+n).classList.remove('hidden');
+  currentStep=n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function submitShipping(){
+  var form=document.getElementById('shipping-form');
+  if(!form.checkValidity()){form.reportValidity();return;}
+  shippingAddress={
+    full_name:document.getElementById('ship-name').value.trim(),
+    phone:document.getElementById('ship-phone').value.trim(),
+    line1:document.getElementById('ship-line1').value.trim(),
+    line2:document.getElementById('ship-line2').value.trim(),
+    city:document.getElementById('ship-city').value.trim(),
+    state:document.getElementById('ship-state').value.trim(),
+    postal_code:document.getElementById('ship-postal').value.trim(),
+    country:document.getElementById('ship-country').value
+  };
+  document.getElementById('ship-summary-name').textContent=shippingAddress.full_name;
+  var addr=[shippingAddress.line1];
+  if(shippingAddress.line2)addr.push(shippingAddress.line2);
+  addr.push(shippingAddress.city+', '+shippingAddress.postal_code+', '+shippingAddress.country);
+  document.getElementById('ship-summary-addr').textContent=addr.join(', ');
+  goToStep(3);
+}
+
+function submitPayment(){
+  var btn=document.getElementById('pay-btn');
+  btn.disabled=true;
+  btn.innerHTML='<div class="spinner" style="width:18px;height:18px;border-width:2px;border-color:#ffffff40;border-top-color:#fff;margin-right:8px;display:inline-block;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;"></div> Processing…';
+  document.getElementById('overlay').style.display='flex';
+
+  // Build items list for backend
+  var items=cart.map(function(item){
+    return{product_id:item.id,product_slug:item.id,quantity:item.qty};
+  });
+
+  // Guest email for unauthenticated checkout
+  var guestEmail=(!session||!session.user)
+    ?document.getElementById('guest-email').value.trim()
+    :null;
+
+  var headers={'Content-Type':'application/json'};
+  var token=getToken();
+  if(token)headers['Authorization']='Bearer '+token;
+
+  fetch(BACKEND_URL+'/api/payments/create-checkout-session',{
+    method:'POST',
+    headers:headers,
+    body:JSON.stringify({
+      items:items,
+      shipping_address:shippingAddress,
+      coupon_code:coupon?coupon.code:null,
+      guest_email:guestEmail
+    })
+  })
+  .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d};});})
+  .then(function(r){
+    if(!r.ok)throw new Error(r.d.error||'Checkout failed');
+    window.location.href=r.d.url;
+  })
+  .catch(function(err){
+    document.getElementById('overlay').style.display='none';
+    btn.disabled=false;
+    btn.innerHTML='<span class="material-symbols-outlined text-base">lock</span> Place Order & Pay';
+    showToast(err.message||'Something went wrong. Please try again.','#ba1a1a');
+  });
+}
+
+function showToast(msg,bg){
+  var t=document.createElement('div');
+  t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 24px;border-radius:9999px;font-family:Inter,sans-serif;font-size:14px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.15);transition:opacity .3s;white-space:nowrap;pointer-events:none;background:'+(bg||'#006686')+';color:#fff;';
+  document.body.appendChild(t);
+  setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},300);},3500);
+}
+
+init();
+</script>
+</body>
+</html>

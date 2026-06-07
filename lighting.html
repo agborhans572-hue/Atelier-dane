@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lighting Collection | Dane Design</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#f7fafd", "surface": "#f7fafd", "surface-dim": "#d7dade", "surface-bright": "#f7fafd",
+                    "surface-container-lowest": "#ffffff", "surface-container-low": "#f1f4f7", "surface-container": "#ebeef1",
+                    "surface-container-high": "#e5e8ec", "surface-container-highest": "#e0e3e6", "surface-variant": "#e0e3e6",
+                    "surface-tint": "#006686", "on-surface": "#181c1f", "on-surface-variant": "#3f484e", "on-background": "#181c1f",
+                    "inverse-surface": "#2d3134", "inverse-on-surface": "#eef1f4", "outline": "#6f787e", "outline-variant": "#bec8ce",
+                    "primary": "#006686", "on-primary": "#ffffff", "primary-container": "#7dd3fc", "on-primary-container": "#005b78",
+                    "primary-fixed": "#c0e8ff", "primary-fixed-dim": "#7bd1fa", "on-primary-fixed": "#001e2b", "on-primary-fixed-variant": "#004d66",
+                    "inverse-primary": "#7bd1fa", "secondary": "#5c5f61", "on-secondary": "#ffffff", "secondary-container": "#e0e3e5",
+                    "on-secondary-container": "#626567", "secondary-fixed": "#e0e3e5", "secondary-fixed-dim": "#c4c7c9",
+                    "on-secondary-fixed": "#191c1e", "on-secondary-fixed-variant": "#444749", "tertiary": "#595f66", "on-tertiary": "#ffffff",
+                    "tertiary-container": "#c3c9d1", "on-tertiary-container": "#4e545b", "tertiary-fixed": "#dde3eb", "tertiary-fixed-dim": "#c1c7cf",
+                    "on-tertiary-fixed": "#161c22", "on-tertiary-fixed-variant": "#41474e", "error": "#ba1a1a", "on-error": "#ffffff",
+                    "error-container": "#ffdad6", "on-error-container": "#93000a", "accent-walnut": "#4B3D33"
+            },
+            "borderRadius": { "DEFAULT": "0.5rem", "sm": "0.25rem", "md": "0.75rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+            "spacing": { "unit": "8px", "stack-sm": "8px", "stack-md": "16px", "stack-lg": "32px", "gutter": "24px",
+                    "section-gap": "80px", "container-max": "1280px", "margin-desktop": "64px", "margin-mobile": "20px" },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans","sans-serif"], "display": ["Plus Jakarta Sans","sans-serif"],
+                    "body": ["Inter","sans-serif"], "label": ["Inter","sans-serif"],
+                    "headline-lg": ["Plus Jakarta Sans","sans-serif"], "headline-md": ["Plus Jakarta Sans","sans-serif"],
+                    "display-lg": ["Plus Jakarta Sans","sans-serif"], "display-lg-mobile": ["Plus Jakarta Sans","sans-serif"],
+                    "body-lg": ["Inter","sans-serif"], "body-md": ["Inter","sans-serif"],
+                    "label-md": ["Inter","sans-serif"], "label-sm": ["Inter","sans-serif"], "mono": ["'JetBrains Mono'","monospace"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight":"1.2","fontWeight":"700"}],
+                    "headline-lg": ["30px", {"lineHeight":"1.3","fontWeight":"600"}],
+                    "headline-md": ["24px", {"lineHeight":"1.4","fontWeight":"600"}],
+                    "body-lg": ["18px", {"lineHeight":"1.6","fontWeight":"400"}],
+                    "body-md": ["16px", {"lineHeight":"1.6","fontWeight":"400"}],
+                    "label-md": ["14px", {"lineHeight":"1","letterSpacing":"0.01em","fontWeight":"500"}],
+                    "label-sm": ["12px", {"lineHeight":"1","letterSpacing":"0.05em","fontWeight":"600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-panel { background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 8px 32px rgba(30,41,59,0.05); }
+        .glass-elevated { background: rgba(255,255,255,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 12px 40px rgba(30,41,59,0.08); }
+        .frozen-glow { box-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        .interactive-glow:hover { box-shadow: 0 20px 40px -10px rgba(30,41,59,0.15); }
+        .ambient-shadow { box-shadow: 0 20px 40px rgba(15,23,42,0.04); }
+        .atmospheric-shadow { box-shadow: 0 30px 60px -15px rgba(0,0,0,0.15), 0 20px 30px -10px rgba(0,0,0,0.1); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .js-reveal { opacity: 0; transform: translateY(2rem); transition: opacity 1s ease, transform 1s ease; }
+        .js-reveal.is-visible { opacity: 1; transform: translateY(0); }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased selection:bg-primary-container pt-24">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-white/30 shadow-[0_8px_30px_rgba(15,23,42,0.05)]">
+<div class="flex justify-between items-center px-6 md:px-margin-desktop py-stack-md max-w-container-max mx-auto">
+<a class="font-display text-2xl font-bold text-on-surface tracking-tight" href="index.html">Dane Design</a>
+<div class="hidden md:flex items-center gap-stack-lg">
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-secondary hover:text-primary" href="seating.html">Seating</a>
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-primary border-b-2 border-primary pb-1" href="lighting.html">Lighting</a>
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-secondary hover:text-primary" href="tables.html">Tables</a>
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-secondary hover:text-primary" href="storage.html">Storage</a>
+</div>
+<div class="flex items-center gap-stack-md">
+<button aria-label="Search" class="material-symbols-outlined text-on-surface hover:text-primary transition-colors p-2">search</button>
+<button aria-label="Cart" class="material-symbols-outlined text-on-surface hover:text-primary transition-colors p-2">shopping_bag</button>
+<button aria-label="Account" class="material-symbols-outlined text-on-surface hover:text-primary transition-colors p-2">person</button>
+</div>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-[716px] flex items-center px-margin-desktop py-section-gap overflow-hidden">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center w-full max-w-container-max mx-auto js-reveal">
+<div class="md:col-span-5 z-10 space-y-stack-lg">
+<div class="inline-block px-4 py-1.5 glass-panel rounded-full text-primary font-label-md tracking-wider uppercase mb-4">Collection 2024</div>
+<h1 class="font-display-lg text-display-lg text-on-surface leading-none">Lighting Guide</h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-md">
+                        Scandinavian lighting is defined by its ability to emulate natural light. Our collection focuses on diffuse warmth, technical precision, and architectural silence.
+                    </p>
+<div class="flex flex-wrap gap-stack-md pt-stack-md">
+<div class="glass-panel p-4 rounded-xl flex-1 min-w-[140px]">
+<span class="block font-label-sm text-label-sm uppercase text-secondary mb-1">Concept</span>
+<span class="block font-headline-md text-headline-md text-on-surface">Layered Lighting</span>
+</div>
+<div class="glass-panel p-4 rounded-xl flex-1 min-w-[140px]">
+<span class="block font-label-sm text-label-sm uppercase text-secondary mb-1">Optimal</span>
+<span class="block font-headline-md text-headline-md text-on-surface">2700K Temp</span>
+</div>
+</div>
+</div>
+<div class="md:col-span-7 relative h-[600px]">
+<div class="absolute inset-0 bg-surface-container-high rounded-3xl overflow-hidden shadow-2xl">
+<img class="w-full h-full object-cover" alt="Minimalist designer floor lamp with a slender stem and frosted glass globe in a bright Scandinavian interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUIr8XZCIMpxlOGP-6JFiuBGee_VmIFVR2hUVH-I4p-lsgJZF9W_F8scJbXdJRdXjRG4d89BD_T7u9xPz5y7SIFtYUixvlFiZDOPu2wqNKXg0l8UMEY9y7l4IY3Q8u7ek4bCTm-0kqUjbz-EbNAMs87oVaPCnCg-sO1KUxUXioXZrBhqvO07Vj2DYKRvd_KhAU-97DLJ_FxUdvTD5qhUO3Ako3GGuxjpYuV7CU7Vse1C2JVfhWniFui1wCOpvvFJtutIIai4vr23o"/>
+</div>
+<!-- Decorative element -->
+<div class="absolute -bottom-10 -left-10 w-40 h-40 bg-primary-container rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+</div>
+</div>
+</section>
+<!-- Product Grid -->
+<section class="px-margin-desktop py-section-gap bg-surface-container-lowest">
+<div class="max-w-container-max mx-auto js-reveal">
+<div class="flex justify-between items-end mb-stack-lg border-b border-surface-variant pb-stack-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Curated Selection</h2>
+<p class="font-body-md text-body-md text-secondary">Functional art for contemporary interiors.</p>
+</div>
+<div class="flex gap-4">
+<button aria-label="Grid view" class="material-symbols-outlined p-2 border border-outline-variant rounded-full hover:bg-surface-variant transition-colors">grid_view</button>
+<button aria-label="Filter" class="material-symbols-outlined p-2 border border-outline-variant rounded-full hover:bg-surface-variant transition-colors">filter_list</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Product 1 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] bg-surface-container rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<span class="absolute top-4 left-4 z-10 bg-primary-container text-on-primary-fixed-variant px-3 py-1 rounded-full font-label-sm uppercase tracking-tighter">New Arrival</span>
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Aura Floor Lamp — brushed steel floor lamp with a warm spherical head" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGD53iL_ENLzR3s2s8_lcsgIaQBkkqSCqEgjcielsF9Xe7YmczX5bc_rUv_Z0gs1SF8ioA5bdzO0LEw0N25lSESRNoVluJ53P4NN7fWAZIR9rDfX1STiatsFcs4Gj01eOpT_02jRumYU3ONszKETT5CZ-jgXFWdXrw1IoZ17YIKp2qvhfbGXOuVZu1fr9Of3QqylHm2g-T5WC1rXH_i60nTru89wHhejsF6om3tgLkfhV2feh9PpPJaHDBFb9sGfaQgt9Z5-_eRmQ"/>
+<div class="absolute bottom-4 right-4 glass-panel p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface">add_shopping_cart</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Aura Floor Lamp</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$580</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Brushed Steel &amp; Frosted Glass</p>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] bg-surface-container rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Lumina Pendant — pleated paper pendant light over a light oak dining table" src="images/Lumina%20Pendant.png"/>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Lumina Pendant</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$450</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Organic Pleated Paper</p>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] bg-surface-container rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Vesper Wall Sconce — charcoal wall sconce casting a soft downward glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP6ziSqnDYpuhuC9_ysJoFUDytpuzh0j3LpNtn5_oCtzlCyzqmT1aQ7E73RJ1-mfGXc2x3hYrMvpfnjSvr-j4PH3qsg12_E-bPSbzee6lzsl8LjKiMumweRXtW6xLOnxwJC_Qbnie3pRFtV1V7vH3fG69k6nQKA9L1lR-P5LvcYVjqmxRX_nLTpARVm6DmXx8lHSP2i_6E7CuBaqEylinfhE8BGKi83gTLaki-r_tVhpErhLwSykZAS09D4QjRW7rhjZX0wFyoDw4"/>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Vesper Wall Sconce</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$185</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Powder Coated Aluminum</p>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] bg-surface-container rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Lumen Desk Lamp — sleek adjustable desk lamp with a warm LED light source" src="images/Lumen%20Desk%20Lamp.png"/>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Lumen Desk Lamp</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$220</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Touch-Sensitive Controls</p>
+</div>
+</div>
+<!-- Product 5 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<div class="w-full h-full bg-gradient-to-b from-[#14142A] via-[#20203C] to-[#0C0C1C] group-hover:scale-105 transition-transform duration-500"></div>
+<div class="absolute bottom-4 right-4 glass-panel p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface">add_shopping_cart</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Isvik Chandelier</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$4,100</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">8-Arm, Hand-Blown Smoked Glass</p>
+</div>
+</div>
+<!-- Product 6 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<div class="w-full h-full bg-gradient-to-b from-[#5C4A20] via-[#8A7030] to-[#3C3010] group-hover:scale-105 transition-transform duration-500"></div>
+<div class="absolute bottom-4 right-4 glass-panel p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface">add_shopping_cart</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Fjäril Arc Floor Lamp</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$1,120</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Brushed Brass &amp; Linen Shade</p>
+</div>
+</div>
+<!-- Product 7 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<span class="absolute top-4 left-4 z-10 bg-primary-container text-on-primary-fixed-variant px-3 py-1 rounded-full font-label-sm uppercase tracking-tighter">Pair</span>
+<div class="w-full h-full bg-gradient-to-b from-[#1A1A1A] via-[#2A2A2A] to-[#0C0C0C] group-hover:scale-105 transition-transform duration-500"></div>
+<div class="absolute bottom-4 right-4 glass-panel p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface">add_shopping_cart</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Dalarna Wall Sconce</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$740</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Blackened Steel &amp; Opal Glass</p>
+</div>
+</div>
+<!-- Product 8 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<div class="w-full h-full bg-gradient-to-b from-[#D8CEC0] via-[#EAE0D2] to-[#C0B4A4] group-hover:scale-105 transition-transform duration-500"></div>
+<div class="absolute bottom-4 right-4 glass-panel p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface">add_shopping_cart</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Solstice Table Lamp</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$580</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Thrown Stoneware &amp; Silk Shade</p>
+</div>
+</div>
+<!-- Product 9 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<div class="w-full h-full bg-gradient-to-b from-[#4A4820] via-[#686630] to-[#2E2C10] group-hover:scale-105 transition-transform duration-500"></div>
+<div class="absolute bottom-4 right-4 glass-panel p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface">add_shopping_cart</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Strand Lantern</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$245</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Rechargeable, Brass &amp; Borosilicate</p>
+</div>
+</div>
+<!-- Product 10 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<div class="w-full h-full bg-gradient-to-b from-[#E8E4E0] via-[#F0ECEC] to-[#D0CCCC] group-hover:scale-105 transition-transform duration-500"></div>
+<div class="absolute bottom-4 right-4 glass-panel p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface">add_shopping_cart</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Polaris Track System</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$890</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Matte Porcelain, 4-Spot, 2m</p>
+</div>
+</div>
+<!-- Product 11 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<div class="w-full h-full bg-gradient-to-b from-[#2A2030] via-[#3A3040] to-[#1A1020] group-hover:scale-105 transition-transform duration-500"></div>
+<div class="absolute bottom-4 right-4 glass-panel p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface">add_shopping_cart</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Atmos Pendant</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$1,340</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Blown Glass, Adjustable Cord</p>
+</div>
+</div>
+<!-- Product 12 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[3/4] rounded-2xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+<div class="w-full h-full bg-gradient-to-b from-[#8A7840] via-[#A89050] to-[#6A5828] group-hover:scale-105 transition-transform duration-500"></div>
+<div class="absolute bottom-4 right-4 glass-panel p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-surface">add_shopping_cart</span>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Solur Candleholder</h3>
+<span class="font-body-lg text-body-lg text-on-surface">$185</span>
+</div>
+<p class="font-body-md text-body-md text-secondary">Cast Brass, Set of Three</p>
+</div>
+</div>
+</div>
+<div class="mt-section-gap flex justify-center">
+<button class="bg-accent-walnut text-on-primary font-label-md px-stack-lg py-4 rounded-full flex items-center gap-2 hover:scale-105 transition-transform">
+                        Explore Full Collection
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Technical Section: Light & Atmosphere -->
+<section class="px-margin-desktop py-section-gap bg-surface">
+<div class="max-w-container-max mx-auto js-reveal">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-stack-lg items-center">
+<div class="order-2 lg:order-1 glass-panel p-stack-lg rounded-[2rem] shadow-xl">
+<h2 class="font-display-lg text-headline-lg text-on-surface mb-stack-md">Light &amp; Atmosphere</h2>
+<div class="space-y-stack-md">
+<div class="flex gap-4">
+<div class="bg-primary-container/20 p-3 rounded-xl h-fit">
+<span class="material-symbols-outlined text-primary">lightbulb</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-1">Lumens &amp; Clarity</h4>
+<p class="font-body-md text-body-md text-secondary">We prioritize high CRI (Color Rendering Index) to ensure textures and colors in your home appear as nature intended.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="bg-primary-container/20 p-3 rounded-xl h-fit">
+<span class="material-symbols-outlined text-primary">eco</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-1">Efficiency</h4>
+<p class="font-body-md text-body-md text-secondary">Integrated LED modules provide 50,000 hours of life while consuming 80% less energy than halogen counterparts.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="bg-primary-container/20 p-3 rounded-xl h-fit">
+<span class="material-symbols-outlined text-primary">blur_on</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] text-on-surface mb-1">Ambient vs. Task</h4>
+<p class="font-body-md text-body-md text-secondary">A successful lighting scheme layers task-oriented focus with soft, ceiling-reflected ambient wash.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2 space-y-stack-md">
+<div class="relative rounded-3xl overflow-hidden aspect-video shadow-2xl">
+<img class="w-full h-full object-cover" alt="Macro close-up of a designer bulb filament glowing with warm amber light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu9srlDNbj9QiI_sVbZNuZcbu-biGcwyvl_UxpvC6Y1afUaXSu_jy7WX3mhGwVSP99qguOEOT6LV3DVrF9VV0Qx8qF_lmIPzigAevzzMlf9Hva-UK2KgXiAaNFJvFB0LN1ejv2Pj3VEl6vxY78x-z-p4EE67tEAs1sGgods7d4INpdZlpe6SLGlnmYuf_D7bU3XZAk9nByStjI9rrC_ZUj2UyopBBr-q1sjebUfh_78dBACJVfun-QMahNg_qWfeZiArKIT9y6bcM"/>
+</div>
+<div class="flex gap-stack-sm">
+<div class="flex-1 h-1 bg-primary-container rounded-full"></div>
+<div class="flex-1 h-1 bg-outline-variant rounded-full opacity-30"></div>
+<div class="flex-1 h-1 bg-outline-variant rounded-full opacity-30"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-surface-container-lowest border-t border-surface-container-high">
+<div class="px-6 md:px-margin-desktop py-section-gap flex flex-col md:flex-row justify-between items-start gap-stack-lg max-w-container-max mx-auto">
+<div class="space-y-stack-md">
+<a class="font-display text-headline-md text-on-surface font-bold" href="index.html">Dane Design</a>
+<p class="font-body text-body-md text-secondary max-w-xs">Creating serene environments through minimalist Scandinavian furniture and lighting.</p>
+<div class="text-secondary font-body text-body-md">© 2024 Dane Design. All rights reserved.</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-lg">
+<div class="space-y-4">
+<h5 class="font-label text-label-md uppercase tracking-wider text-on-surface">Collections</h5>
+<ul class="space-y-2">
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="seating.html">Seating</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="lighting.html">Lighting</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="tables.html">Tables</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="storage.html">Storage</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h5 class="font-label text-label-md uppercase tracking-wider text-on-surface">Legal</h5>
+<ul class="space-y-2">
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="shipping.html">Shipping</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="sustainability.html">Sustainability</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="care-guide.html">Care Guide</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="showrooms.html">Showrooms</a></li>
+</ul>
+</div>
+</div>
+<div class="w-full md:w-auto">
+<h5 class="font-label text-label-md uppercase tracking-wider text-on-surface mb-4">Journal</h5>
+<form id="newsletter-form" class="flex border-b border-outline-variant pb-2">
+<input id="newsletter-email" aria-label="Email address" class="bg-transparent border-none focus:ring-0 font-body w-full" placeholder="Email address" type="email" required/>
+<button type="submit" aria-label="Subscribe" class="material-symbols-outlined text-secondary hover:text-primary transition-colors">arrow_right_alt</button>
+</form>
+</div>
+</div>
+</footer>
+<script>
+        (function () {
+            var els = document.querySelectorAll('.js-reveal');
+            if (!('IntersectionObserver' in window)) { els.forEach(function (e){e.classList.add('is-visible');}); return; }
+            var obs = new IntersectionObserver(function (entries, o) {
+                entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-visible'); o.unobserve(en.target); } });
+            }, { threshold: 0.1 });
+            els.forEach(function (e){ obs.observe(e); });
+        })();
+    </script>
+<script src="supabase-integration.js"></script>
+<script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

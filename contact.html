@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact Us | Dane Design</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#006686","on-surface":"#181c1f","secondary":"#5c5f61","accent-walnut":"#4B3D33"},fontFamily:{headline:["Plus Jakarta Sans","sans-serif"],body:["Inter","sans-serif"]}}}}</script>
+<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;vertical-align:middle}html{scroll-behavior:smooth}</style>
+</head>
+<body class="bg-[#f7fafd] text-[#181c1f] font-['Inter'] antialiased pt-24">
+
+<nav class="fixed top-0 left-0 w-full z-50 bg-[#f7fafd]/70 backdrop-blur-xl border-b border-white/30 shadow-[0_8px_30px_rgba(15,23,42,0.05)]">
+<div class="flex justify-between items-center px-6 md:px-16 py-4 max-w-[1280px] mx-auto">
+  <a class="font-['Plus_Jakarta_Sans'] text-2xl font-bold text-[#181c1f] tracking-tight" href="index.html">Dane Design</a>
+  <div class="hidden md:flex items-center gap-8">
+    <a class="text-sm font-medium uppercase tracking-wider text-[#5c5f61] hover:text-[#006686] transition-colors" href="seating.html">Seating</a>
+    <a class="text-sm font-medium uppercase tracking-wider text-[#5c5f61] hover:text-[#006686] transition-colors" href="lighting.html">Lighting</a>
+    <a class="text-sm font-medium uppercase tracking-wider text-[#5c5f61] hover:text-[#006686] transition-colors" href="tables.html">Tables</a>
+    <a class="text-sm font-medium uppercase tracking-wider text-[#5c5f61] hover:text-[#006686] transition-colors" href="storage.html">Storage</a>
+  </div>
+  <button class="material-symbols-outlined text-[#181c1f] hover:text-[#006686] transition-colors p-2">shopping_bag</button>
+</div>
+</nav>
+
+<main>
+<section class="max-w-[1280px] mx-auto px-6 md:px-16 py-20">
+  <div class="max-w-xl mb-16">
+    <span class="text-[#006686] text-xs uppercase tracking-widest mb-4 block font-medium">Get in Touch</span>
+    <h1 class="font-['Plus_Jakarta_Sans'] text-5xl font-semibold text-[#181c1f] mb-6 leading-tight">We'd love to hear from you.</h1>
+    <p class="text-[#5c5f61] text-lg font-light leading-relaxed">Whether you have a question about an order, want advice on a piece, or would like to book a design consultation — our team responds within one business day.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+    <!-- Contact form -->
+    <div>
+      <form class="space-y-6">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-[#181c1f] mb-2">First name</label>
+            <input type="text" class="w-full border border-[#bec8ce] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006686] transition-colors bg-white" placeholder="Henrik"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[#181c1f] mb-2">Last name</label>
+            <input type="text" class="w-full border border-[#bec8ce] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006686] transition-colors bg-white" placeholder="Dahl"/>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-[#181c1f] mb-2">Email</label>
+          <input type="email" class="w-full border border-[#bec8ce] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006686] transition-colors bg-white" placeholder="you@example.com"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-[#181c1f] mb-2">Subject</label>
+          <select class="w-full border border-[#bec8ce] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006686] transition-colors bg-white text-[#5c5f61]">
+            <option>Order enquiry</option>
+            <option>Product question</option>
+            <option>Design consultation</option>
+            <option>Trade programme</option>
+            <option>Press & partnerships</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-[#181c1f] mb-2">Message</label>
+          <textarea rows="6" class="w-full border border-[#bec8ce] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#006686] transition-colors bg-white resize-none" placeholder="Tell us how we can help…"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-[#4B3D33] text-white font-medium py-4 rounded-full hover:opacity-90 transition-opacity active:scale-95">Send Message</button>
+      </form>
+    </div>
+
+    <!-- Contact info + consultation -->
+    <div class="space-y-10">
+      <div class="space-y-5">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-full bg-[#e5e8ec] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[#006686] text-lg">mail</span>
+          </div>
+          <div>
+            <p class="font-medium text-[#181c1f] mb-1">Email</p>
+            <a href="mailto:hello@danedesign.com" class="text-[#5c5f61] hover:text-[#006686] transition-colors">hello@danedesign.com</a>
+            <p class="text-xs text-[#5c5f61] mt-1">We respond within one business day.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-full bg-[#e5e8ec] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[#006686] text-lg">call</span>
+          </div>
+          <div>
+            <p class="font-medium text-[#181c1f] mb-1">Phone</p>
+            <a href="tel:+4512345678" class="text-[#5c5f61] hover:text-[#006686] transition-colors">+45 12 34 56 78</a>
+            <p class="text-xs text-[#5c5f61] mt-1">Mon–Fri, 9:00–17:00 CET</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 rounded-full bg-[#e5e8ec] flex items-center justify-center shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[#006686] text-lg">location_on</span>
+          </div>
+          <div>
+            <p class="font-medium text-[#181c1f] mb-1">Head Office</p>
+            <p class="text-[#5c5f61]">Bredgade 28<br/>1260 Copenhagen K<br/>Denmark</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Design consultation -->
+      <div id="consultation" class="bg-[#18272e] rounded-[2rem] p-10 scroll-mt-24">
+        <span class="text-white/50 text-xs uppercase tracking-widest mb-4 block font-medium">Free Service</span>
+        <h3 class="font-['Plus_Jakarta_Sans'] text-2xl font-semibold text-white mb-4">Book a Design Consultation</h3>
+        <p class="text-white/60 text-base font-light leading-relaxed mb-8">Spend an hour with one of our in-house advisors — in person at our Copenhagen showroom, or remotely via video call. Bring photos of your space and a list of what you're looking for. We'll do the rest.</p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-3 text-white/70 text-sm"><span class="material-symbols-outlined text-[#006686] text-base">check_circle</span> No obligation, no hard sell</li>
+          <li class="flex items-center gap-3 text-white/70 text-sm"><span class="material-symbols-outlined text-[#006686] text-base">check_circle</span> Available in person or remotely</li>
+          <li class="flex items-center gap-3 text-white/70 text-sm"><span class="material-symbols-outlined text-[#006686] text-base">check_circle</span> Moodboard and product shortlist provided</li>
+          <li class="flex items-center gap-3 text-white/70 text-sm"><span class="material-symbols-outlined text-[#006686] text-base">check_circle</span> Follow-up summary emailed within 24 hours</li>
+        </ul>
+        <a href="mailto:consult@danedesign.com" class="inline-block bg-white text-[#181c1f] font-medium px-8 py-3 rounded-full text-sm hover:bg-white/90 transition-opacity">Book via Email</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="w-full bg-white border-t border-[#e5e8ec]">
+  <div class="max-w-[1280px] mx-auto px-6 md:px-16 py-12 flex flex-col md:flex-row justify-between items-center gap-4">
+    <p class="text-[#5c5f61] text-sm">© 2025 Dane Design. All rights reserved.</p>
+    <div class="flex gap-6 text-sm text-[#5c5f61]">
+      <a href="index.html" class="hover:text-[#006686] transition-colors">Home</a>
+      <a href="privacy-policy.html" class="hover:text-[#006686] transition-colors">Privacy</a>
+      <a href="terms.html" class="hover:text-[#006686] transition-colors">Terms</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

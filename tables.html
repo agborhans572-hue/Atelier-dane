@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tables Collection | Dane Design</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#f7fafd", "surface": "#f7fafd", "surface-dim": "#d7dade", "surface-bright": "#f7fafd",
+                    "surface-container-lowest": "#ffffff", "surface-container-low": "#f1f4f7", "surface-container": "#ebeef1",
+                    "surface-container-high": "#e5e8ec", "surface-container-highest": "#e0e3e6", "surface-variant": "#e0e3e6",
+                    "surface-tint": "#006686", "on-surface": "#181c1f", "on-surface-variant": "#3f484e", "on-background": "#181c1f",
+                    "inverse-surface": "#2d3134", "inverse-on-surface": "#eef1f4", "outline": "#6f787e", "outline-variant": "#bec8ce",
+                    "primary": "#006686", "on-primary": "#ffffff", "primary-container": "#7dd3fc", "on-primary-container": "#005b78",
+                    "primary-fixed": "#c0e8ff", "primary-fixed-dim": "#7bd1fa", "on-primary-fixed": "#001e2b", "on-primary-fixed-variant": "#004d66",
+                    "inverse-primary": "#7bd1fa", "secondary": "#5c5f61", "on-secondary": "#ffffff", "secondary-container": "#e0e3e5",
+                    "on-secondary-container": "#626567", "secondary-fixed": "#e0e3e5", "secondary-fixed-dim": "#c4c7c9",
+                    "on-secondary-fixed": "#191c1e", "on-secondary-fixed-variant": "#444749", "tertiary": "#595f66", "on-tertiary": "#ffffff",
+                    "tertiary-container": "#c3c9d1", "on-tertiary-container": "#4e545b", "tertiary-fixed": "#dde3eb", "tertiary-fixed-dim": "#c1c7cf",
+                    "on-tertiary-fixed": "#161c22", "on-tertiary-fixed-variant": "#41474e", "error": "#ba1a1a", "on-error": "#ffffff",
+                    "error-container": "#ffdad6", "on-error-container": "#93000a", "accent-walnut": "#4B3D33"
+            },
+            "borderRadius": { "DEFAULT": "0.5rem", "sm": "0.25rem", "md": "0.75rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+            "spacing": { "unit": "8px", "stack-sm": "8px", "stack-md": "16px", "stack-lg": "32px", "gutter": "24px",
+                    "section-gap": "80px", "container-max": "1280px", "margin-desktop": "64px", "margin-mobile": "20px" },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans","sans-serif"], "display": ["Plus Jakarta Sans","sans-serif"],
+                    "body": ["Inter","sans-serif"], "label": ["Inter","sans-serif"],
+                    "headline-lg": ["Plus Jakarta Sans","sans-serif"], "headline-md": ["Plus Jakarta Sans","sans-serif"],
+                    "display-lg": ["Plus Jakarta Sans","sans-serif"], "display-lg-mobile": ["Plus Jakarta Sans","sans-serif"],
+                    "body-lg": ["Inter","sans-serif"], "body-md": ["Inter","sans-serif"],
+                    "label-md": ["Inter","sans-serif"], "label-sm": ["Inter","sans-serif"], "mono": ["'JetBrains Mono'","monospace"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight":"1.2","fontWeight":"700"}],
+                    "headline-lg": ["30px", {"lineHeight":"1.3","fontWeight":"600"}],
+                    "headline-md": ["24px", {"lineHeight":"1.4","fontWeight":"600"}],
+                    "body-lg": ["18px", {"lineHeight":"1.6","fontWeight":"400"}],
+                    "body-md": ["16px", {"lineHeight":"1.6","fontWeight":"400"}],
+                    "label-md": ["14px", {"lineHeight":"1","letterSpacing":"0.01em","fontWeight":"500"}],
+                    "label-sm": ["12px", {"lineHeight":"1","letterSpacing":"0.05em","fontWeight":"600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-panel { background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 8px 32px rgba(30,41,59,0.05); }
+        .glass-elevated { background: rgba(255,255,255,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 12px 40px rgba(30,41,59,0.08); }
+        .frozen-glow { box-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        .interactive-glow:hover { box-shadow: 0 20px 40px -10px rgba(30,41,59,0.15); }
+        .ambient-shadow { box-shadow: 0 20px 40px rgba(15,23,42,0.04); }
+        .atmospheric-shadow { box-shadow: 0 30px 60px -15px rgba(0,0,0,0.15), 0 20px 30px -10px rgba(0,0,0,0.1); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .js-reveal { opacity: 0; transform: translateY(2rem); transition: opacity 1s ease, transform 1s ease; }
+        .js-reveal.is-visible { opacity: 1; transform: translateY(0); }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased selection:bg-primary-container pt-24">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-white/30 shadow-[0_8px_30px_rgba(15,23,42,0.05)]">
+<div class="flex justify-between items-center px-6 md:px-margin-desktop py-stack-md max-w-container-max mx-auto">
+<a class="font-display text-2xl font-bold text-on-surface tracking-tight" href="index.html">Dane Design</a>
+<div class="hidden md:flex items-center gap-stack-lg">
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-secondary hover:text-primary" href="seating.html">Seating</a>
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-secondary hover:text-primary" href="lighting.html">Lighting</a>
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-primary border-b-2 border-primary pb-1" href="tables.html">Tables</a>
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-secondary hover:text-primary" href="storage.html">Storage</a>
+</div>
+<div class="flex items-center gap-stack-md">
+<button aria-label="Search" class="material-symbols-outlined text-on-surface hover:text-primary transition-colors p-2">search</button>
+<button aria-label="Cart" class="material-symbols-outlined text-on-surface hover:text-primary transition-colors p-2">shopping_bag</button>
+<button aria-label="Account" class="material-symbols-outlined text-on-surface hover:text-primary transition-colors p-2">person</button>
+</div>
+</div>
+</nav>
+<main class="pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+<!-- Hero Section -->
+<header class="mb-section-gap text-center max-w-3xl mx-auto">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-stack-md tracking-tighter">Master Craftsmanship, Functional Beauty.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Discover our curated collection of tables. Designed with an unwavering commitment to minimalism, showcasing the inherent beauty of natural materials and precise engineering.</p>
+</header>
+<!-- Product Grid (3-Column Style) - Individual Tables -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-16 mb-section-gap">
+<!-- Architect's Desk -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-surface-container-lowest rounded-xl overflow-hidden mb-stack-md">
+<img alt="The Architect's Desk" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAONb8hQwDOXFS3YTQsOlTVYwkd9Q8sbc6khXxgrDLhIsnh6iw1SvniHDGaLxOkue_GUh8DD_3bpxadZrI7qLbKYmqGyn6CnQtvQIKE-ekSgWzzFJ04bm0Ka-6lGZNimTT4JmL0_o0hDKFAoYLZEPI8v2spzpYG9jIdT3HIrbE9uqjQGknJviiAgBZCqNYlTHYgnUOEpo7QlGKxWxYOSsoV6IQukXuiVBpMvAAnZ9ZU-maHisqvZkVCwitgBhf-1IWtqAKZXg1PsTk">
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">The Architect's Desk</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Solid Oak &amp; Frosted Glass</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 160 × D 80 × H 75 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$1,250</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Minimalist Side Table -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden mb-stack-md">
+<img alt="Minimalist Side Table" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-ocVuPMfAmjA2G96M91xTSPncTZmySAdSxJBEAosL19eqCb1n6UMV1S9Ur9OQXx6DvjkdkOHfsn25UEVQEFfNyYEqFI4W9wZkxg1_GzO7coxmO_ZAxeUhcsdEsW85N1vMYOt6btHbEdGCsSzos2c1b8f1Zmic_vtLSroJJLDyYjpTbXU6yAZSbsgpbH6Wh7tLSZKRNeiOMP_Vuy3XMROItuCRFD6eYjYKju0ZI6e_KAhsb7cwk85jNLyXW304Sjk5xlrH2IwwiDk">
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Aura Side Table</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Marble &amp; Steel</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">Ø 45 × H 55 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$450</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Floating Console -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden mb-stack-md">
+<img alt="Floating Console" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzuJ55FJkMkT-iZtXDpmGYPC6nAO2oxnWCm9a0JnAbYOKF6p2K3hDE1s-xax19WhZOsg2DE0SQLDq5A-ZAO67j6BvES0rqRgeOSYVTmtCNvkmtEfHjUN2qBqygY9YVjhTSvlQoGcIrnS-1owcXairnGGfv6aTAbimLYha9uzTAQcTgplBcxY01__xDLhYM_gKpURTP0Hg2jMZfaCNdvEa7-7nKXIgmKwexsmeIPIIZjjVpG5h_AC7rTD8WmTc4llpHC82nGg_yH1s">
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Levity Console</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Walnut &amp; Acrylic</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 120 × D 35 × H 80 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$890</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Elg Coffee Table -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#A08860] via-[#C4A87A] to-[#786448] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Elg Coffee Table</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Live-Edge Oak &amp; Forged Steel</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 130 × D 70 × H 38 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$1,650</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Vind Nesting Tables -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#D8D4D0] via-[#E8E4E0] to-[#C0BCBA] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-4 left-4 z-10 bg-white/90 text-on-surface-variant px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-widest">Set of 3</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Vind Nesting Tables</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Carrara Marble &amp; Brushed Steel</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">Ø 55 / 45 / 35 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$1,850</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Halvard Console -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#252015] via-[#403830] to-[#181008] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Halvard Console</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Heat-Blackened Ash &amp; Brass Hairpin Legs</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 140 × D 32 × H 80 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$1,290</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Mist Floating Bedside -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#E0D8D0] via-[#ECE4DC] to-[#C8C0B8] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Mist Bedside Table</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Smoked Ash &amp; Integrated LED</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 50 × D 30 × H 55 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$720</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Rune Outdoor Side Table -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#7A8C6A] via-[#90A47E] to-[#606E54] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-4 left-4 z-10 bg-white/90 text-on-surface-variant px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-widest">Outdoor</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Rune Outdoor Side Table</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">FSC Teak &amp; Stainless Shelf</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">Ø 50 × H 55 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$480</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Dining Collection Banner -->
+<div class="w-full bg-surface-container-highest rounded-2xl py-16 px-8 mb-16 text-center shadow-sm">
+<h2 class="font-display-lg text-display-lg text-on-surface mb-4 tracking-tighter">The Dining Collection</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Gather around masterfully crafted centerpieces designed for life's most meaningful conversations and shared meals.</p>
+</div>
+<!-- Product Grid (3-Column Style) - Dining Sets -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-16 mb-section-gap">
+<!-- Nordic Dining Set -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-surface-container-lowest rounded-xl overflow-hidden mb-stack-md">
+<img alt="Nordic Dining Set" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" src="images/Nordic%20Dining%20Set.png">
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Fjord Dining Table</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Ash Wood</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 220 × D 100 × H 74 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$2,100</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Tyr Extending Dining Table -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#C0A880] via-[#D8C098] to-[#A08860] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-4 left-4 z-10 bg-white/90 text-on-surface-variant px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-widest">Extends</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Tyr Extending Table</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Solid White Oak, Butterfly Leaf</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 180–270 × D 95 × H 74 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$6,200</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Norn Round Dining Table -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#6A5038] via-[#8A6C50] to-[#503C28] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Norn Round Table</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Solid Walnut, Pedestal Base</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">Ø 130 × H 74 CM · SEATS 4–6</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$3,800</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Ymir Marble Table -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#E0DADC] via-[#EEE8EA] to-[#C8C0C4] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-4 left-4 z-10 bg-white/90 text-on-surface-variant px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-widest">Limited</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Ymir Marble Table</h2>
+<p class="font-mono text-[13px] text-on-surface-variant">Calacatta Marble &amp; Brushed Bronze</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 200 × D 90 × H 74 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$9,400</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Craftsmanship Section -->
+<section class="mb-section-gap max-w-6xl mx-auto">
+<div class="text-center mb-stack-lg">
+<h2 class="font-display-lg text-display-lg text-on-surface mb-stack-md tracking-tighter">The Art of Joinery</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mx-auto">Our tables are built to last generations, utilizing traditional wood joinery techniques that eliminate the need for metal fasteners. From precise mortise and tenon joints to elegant dovetails, every connection is a testament to uncompromising craftsmanship and structural integrity.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="group overflow-hidden rounded-xl bg-surface-container-low border border-surface-container-high hover:border-outline-variant transition-colors flex flex-col">
+<div class="w-full h-48 overflow-hidden bg-surface-container-high">
+<img alt="Macro shot of Mortise &amp; Tenon joint" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD59c6masxzdl_w5_PDpJJQcP_RUb3j1Ys1W3d5cWRuJEs4XJLhviCav1869lXoE-yc-WUBj6SIsPesrPqnzekzgTk3OiskN3pcMGUyI4GZwGG6xR9YhARCx4bH29_LO5-M9Y4cZfsZIV7KxkdLAgJkjxx5cV3-QsPKIqowRlckFeA0FDeTb4Pz1V9SR33iFJbecVnL6AHAjMPHMC2Bmkg9xqTaBTXvDDMq7YBnyHja31JIOrfl206K6e86peg48-VXYpZOryMlCE8">
+</div>
+<div class="p-stack-md flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-stack-sm">Mortise &amp; Tenon</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Seamless integration for maximum strength in load-bearing frames, ensuring a rigid structure without mechanical hardware.</p>
+</div>
+</div>
+<div class="group overflow-hidden rounded-xl bg-surface-container-low border border-surface-container-high hover:border-outline-variant transition-colors flex flex-col">
+<div class="w-full h-48 overflow-hidden bg-surface-container-high">
+<img alt="Macro shot of Dovetail joint" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWf8sdqO28x7lnDVFfZCW7udZGOJQdnM43KSNjLRGDFtjiZI4u51wK7_1ETNuquB8jGDCnmFjSprQVWhU-nRri5uirNLdISk_uJYRWmbbrA_DR89UpzsT1WmvJDTFMIJJuHRgRbMk0r4uTPX04AHrLW9QG_8RPIO6Laxnuso2ugHXRBSOEU2are2RK996nY6eSXdid3jL-gymGa_kq5RANAHAU2JWX2tp7lNijmCgdlJM5qqDmdIN61N7kn6ajMlTLKwF4inp_KNc">
+</div>
+<div class="p-stack-md flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-stack-sm">Dovetail</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Interlocking joints that naturally resist pulling apart, providing enduring stability and a beautiful exposed detail.</p>
+</div>
+</div>
+<div class="group overflow-hidden rounded-xl bg-surface-container-low border border-surface-container-high hover:border-outline-variant transition-colors flex flex-col">
+<div class="w-full h-48 overflow-hidden bg-surface-container-high">
+<img alt="Macro shot of Bridle joint" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6255H-VktRH4CFyntdfu7vMhCdcDvUcolwC4m74XJUGINJavQ2yvoiXnMjI9cFgq1I_q5RRWp3pu48DerkCByaERlJ049nGH_GDhUmueCNtudhDb4WTrEUY4f9B7FGv2BujUuIoHy0W_6CDuOye4FCyBD4HBQz93TthpB9OFMjFsPjv5oD1r224dfYg1KhHybsOQarJfPzlwEWKC19ZDgunms14fXIQYqM0ERISYGz_ENk5cm5TiGm1sBotbbkbUDy45SfbTdJkM">
+</div>
+<div class="p-stack-md flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-stack-sm">Bridle Joint</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Exposed joinery that celebrates the mechanics of the construction, offering excellent twisting resistance.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-surface-container-lowest border-t border-surface-container-high">
+<div class="px-6 md:px-margin-desktop py-section-gap flex flex-col md:flex-row justify-between items-start gap-stack-lg max-w-container-max mx-auto">
+<div class="space-y-stack-md">
+<a class="font-display text-headline-md text-on-surface font-bold" href="index.html">Dane Design</a>
+<p class="font-body text-body-md text-secondary max-w-xs">Creating serene environments through minimalist Scandinavian furniture and lighting.</p>
+<div class="text-secondary font-body text-body-md">© 2024 Dane Design. All rights reserved.</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-lg">
+<div class="space-y-4">
+<h5 class="font-label text-label-md uppercase tracking-wider text-on-surface">Collections</h5>
+<ul class="space-y-2">
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="seating.html">Seating</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="lighting.html">Lighting</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="tables.html">Tables</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="storage.html">Storage</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h5 class="font-label text-label-md uppercase tracking-wider text-on-surface">Legal</h5>
+<ul class="space-y-2">
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="shipping.html">Shipping</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="sustainability.html">Sustainability</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="care-guide.html">Care Guide</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="showrooms.html">Showrooms</a></li>
+</ul>
+</div>
+</div>
+<div class="w-full md:w-auto">
+<h5 class="font-label text-label-md uppercase tracking-wider text-on-surface mb-4">Journal</h5>
+<form id="newsletter-form" class="flex border-b border-outline-variant pb-2">
+<input id="newsletter-email" aria-label="Email address" class="bg-transparent border-none focus:ring-0 font-body w-full" placeholder="Email address" type="email" required/>
+<button type="submit" aria-label="Subscribe" class="material-symbols-outlined text-secondary hover:text-primary transition-colors">arrow_right_alt</button>
+</form>
+</div>
+</div>
+</footer>
+<script>
+        (function () {
+            var els = document.querySelectorAll('.js-reveal');
+            if (!('IntersectionObserver' in window)) { els.forEach(function (e){e.classList.add('is-visible');}); return; }
+            var obs = new IntersectionObserver(function (entries, o) {
+                entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-visible'); o.unobserve(en.target); } });
+            }, { threshold: 0.1 });
+            els.forEach(function (e){ obs.observe(e); });
+        })();
+    </script>
+<script src="supabase-integration.js"></script>
+<script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

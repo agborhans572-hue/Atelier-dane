@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Storage Collection | Dane Design</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#f7fafd", "surface": "#f7fafd", "surface-dim": "#d7dade", "surface-bright": "#f7fafd",
+                    "surface-container-lowest": "#ffffff", "surface-container-low": "#f1f4f7", "surface-container": "#ebeef1",
+                    "surface-container-high": "#e5e8ec", "surface-container-highest": "#e0e3e6", "surface-variant": "#e0e3e6",
+                    "surface-tint": "#006686", "on-surface": "#181c1f", "on-surface-variant": "#3f484e", "on-background": "#181c1f",
+                    "inverse-surface": "#2d3134", "inverse-on-surface": "#eef1f4", "outline": "#6f787e", "outline-variant": "#bec8ce",
+                    "primary": "#006686", "on-primary": "#ffffff", "primary-container": "#7dd3fc", "on-primary-container": "#005b78",
+                    "primary-fixed": "#c0e8ff", "primary-fixed-dim": "#7bd1fa", "on-primary-fixed": "#001e2b", "on-primary-fixed-variant": "#004d66",
+                    "inverse-primary": "#7bd1fa", "secondary": "#5c5f61", "on-secondary": "#ffffff", "secondary-container": "#e0e3e5",
+                    "on-secondary-container": "#626567", "secondary-fixed": "#e0e3e5", "secondary-fixed-dim": "#c4c7c9",
+                    "on-secondary-fixed": "#191c1e", "on-secondary-fixed-variant": "#444749", "tertiary": "#595f66", "on-tertiary": "#ffffff",
+                    "tertiary-container": "#c3c9d1", "on-tertiary-container": "#4e545b", "tertiary-fixed": "#dde3eb", "tertiary-fixed-dim": "#c1c7cf",
+                    "on-tertiary-fixed": "#161c22", "on-tertiary-fixed-variant": "#41474e", "error": "#ba1a1a", "on-error": "#ffffff",
+                    "error-container": "#ffdad6", "on-error-container": "#93000a", "accent-walnut": "#4B3D33"
+            },
+            "borderRadius": { "DEFAULT": "0.5rem", "sm": "0.25rem", "md": "0.75rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+            "spacing": { "unit": "8px", "stack-sm": "8px", "stack-md": "16px", "stack-lg": "32px", "gutter": "24px",
+                    "section-gap": "80px", "container-max": "1280px", "margin-desktop": "64px", "margin-mobile": "20px" },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans","sans-serif"], "display": ["Plus Jakarta Sans","sans-serif"],
+                    "body": ["Inter","sans-serif"], "label": ["Inter","sans-serif"],
+                    "headline-lg": ["Plus Jakarta Sans","sans-serif"], "headline-md": ["Plus Jakarta Sans","sans-serif"],
+                    "display-lg": ["Plus Jakarta Sans","sans-serif"], "display-lg-mobile": ["Plus Jakarta Sans","sans-serif"],
+                    "body-lg": ["Inter","sans-serif"], "body-md": ["Inter","sans-serif"],
+                    "label-md": ["Inter","sans-serif"], "label-sm": ["Inter","sans-serif"], "mono": ["'JetBrains Mono'","monospace"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight":"1.2","fontWeight":"700"}],
+                    "headline-lg": ["30px", {"lineHeight":"1.3","fontWeight":"600"}],
+                    "headline-md": ["24px", {"lineHeight":"1.4","fontWeight":"600"}],
+                    "body-lg": ["18px", {"lineHeight":"1.6","fontWeight":"400"}],
+                    "body-md": ["16px", {"lineHeight":"1.6","fontWeight":"400"}],
+                    "label-md": ["14px", {"lineHeight":"1","letterSpacing":"0.01em","fontWeight":"500"}],
+                    "label-sm": ["12px", {"lineHeight":"1","letterSpacing":"0.05em","fontWeight":"600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-panel { background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 8px 32px rgba(30,41,59,0.05); }
+        .glass-elevated { background: rgba(255,255,255,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 12px 40px rgba(30,41,59,0.08); }
+        .frozen-glow { box-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        .interactive-glow:hover { box-shadow: 0 20px 40px -10px rgba(30,41,59,0.15); }
+        .ambient-shadow { box-shadow: 0 20px 40px rgba(15,23,42,0.04); }
+        .atmospheric-shadow { box-shadow: 0 30px 60px -15px rgba(0,0,0,0.15), 0 20px 30px -10px rgba(0,0,0,0.1); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .js-reveal { opacity: 0; transform: translateY(2rem); transition: opacity 1s ease, transform 1s ease; }
+        .js-reveal.is-visible { opacity: 1; transform: translateY(0); }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased selection:bg-primary-container pt-24">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-white/30 shadow-[0_8px_30px_rgba(15,23,42,0.05)]">
+<div class="flex justify-between items-center px-6 md:px-margin-desktop py-stack-md max-w-container-max mx-auto">
+<a class="font-display text-2xl font-bold text-on-surface tracking-tight" href="index.html">Dane Design</a>
+<div class="hidden md:flex items-center gap-stack-lg">
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-secondary hover:text-primary" href="seating.html">Seating</a>
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-secondary hover:text-primary" href="lighting.html">Lighting</a>
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-secondary hover:text-primary" href="tables.html">Tables</a>
+<a class="font-label-md text-label-md uppercase tracking-wider transition-colors text-primary border-b-2 border-primary pb-1" href="storage.html">Storage</a>
+</div>
+<div class="flex items-center gap-stack-md">
+<button aria-label="Search" class="material-symbols-outlined text-on-surface hover:text-primary transition-colors p-2">search</button>
+<button aria-label="Cart" class="material-symbols-outlined text-on-surface hover:text-primary transition-colors p-2">shopping_bag</button>
+<button aria-label="Account" class="material-symbols-outlined text-on-surface hover:text-primary transition-colors p-2">person</button>
+</div>
+</div>
+</nav>
+<main class="w-full flex flex-col">
+<!-- Hero Section -->
+<section class="w-full h-[60vh] min-h-[500px] relative flex flex-col items-center justify-center mb-section-gap">
+<img alt="Minimalist console table against stark white wall" class="absolute inset-0 w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB24FE9CgqdtmNnEiEiJxe71Hdxo_ksMp0PA-GqW8XBORfRhSfZJzd-_gj5mGu1KeKQ0DOan1kxpMI1aGpHQLVSpol4ygRHg7FUX8jt4laIfIV-ym8ZTkDUXm7emllrX6iMurnylJU7J2OGYsU0RqI0FMpe6OL4UIef6IF_CSChuZSRXgGJCYNkjYag_9mLAn2ZpBsQSWpPeZPjx7nFDOAXXq2XqD0eMwetz-HN-q_7LdetpBUNF81L2EA5zPjt-gSGWlgqjFZnM3s">
+<div class="absolute inset-0 bg-surface/30 backdrop-blur-[2px]"></div>
+<div class="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto gap-stack-lg p-12 bg-surface-container-lowest/90 backdrop-blur-md shadow-2xl border border-outline-variant/10 m-margin-mobile">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tighter">Storage</h1>
+<p class="font-body-lg text-body-lg text-secondary">
+                Refined materials and timeless silhouettes. Our storage collection is designed to organize your space with understated elegance, acting as quiet, architectural statements in any room.
+            </p>
+</div>
+</section>
+<div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full flex flex-col gap-section-gap pb-section-gap">
+<!-- Shelving Unit Modular Gallery - Architectural Grid -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-[2px] bg-outline-variant/30 border border-outline-variant/30 auto-rows-[minmax(280px,_auto)]">
+<!-- Category Description Block -->
+<div class="md:col-span-2 md:row-span-1 p-stack-lg bg-surface flex flex-col justify-center relative group overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+<div class="relative z-10">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Curated Organization</h2>
+<p class="font-body-md text-body-md text-secondary mb-stack-lg max-w-md">Modular systems that adapt to your lifestyle. Combining open display with concealed storage for perfect harmony.</p>
+<div>
+<button class="px-6 py-3 rounded-none bg-on-surface text-surface font-label-md text-label-md transition-all hover:bg-primary active:scale-95">Explore Collections</button>
+</div>
+</div>
+</div>
+<!-- Vertical Item: Shelving Unit -->
+<div class="md:col-span-1 md:row-span-2 group relative bg-surface overflow-hidden flex flex-col">
+<div class="flex-grow w-full overflow-hidden p-stack-md relative h-full">
+<img alt="Minimalist Shelving Unit" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZmgnBeiEewaAFj16RRnYGafxni8YxXVYYsm_3Mg1_IJnkLDouOeW_NCu0vQ7l3utls_0UDBXRYM75nH3mLpW2jP1KIsUBb8E4Xogqagn4Gdgv75yDvPXcsUP-q83aj1oPFFVXGyZsOlZDSHVTvyth6fKDicP6ylmQi3QLk_i9mdV8qPzhkmDWvE8owRvqWKj2nvhJ-eGpWLhcxdEpfNp9jsOpqb4vAbip1rm_v4SwsZsrEmN0hncNrZ46kURHMXKntPcHIYCy-xk">
+<div class="absolute inset-0 bg-surface/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6 backdrop-blur-sm">
+<span class="material-symbols-outlined text-primary text-[32px] mb-3">grid_view</span>
+<p class="font-body-md text-body-md text-on-surface font-medium mb-1">Adjustable Shelving</p>
+<p class="font-body-md text-label-sm text-secondary">Configure heights in 50mm increments</p>
+</div>
+</div>
+<div class="p-stack-md flex justify-between items-center bg-surface border-t border-outline-variant/10 z-10">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface text-[18px]">Aero Shelving</h3>
+<p class="font-body-md text-body-md text-secondary text-[14px]">Powder-coated Steel</p>
+</div>
+<button class="w-8 h-8 rounded-none bg-on-surface text-surface flex items-center justify-center transition-colors hover:bg-primary"><span class="material-symbols-outlined text-[18px]">add</span></button>
+</div>
+</div>
+<!-- Small Square Item 1: Valet Tray -->
+<div class="md:col-span-1 md:row-span-1 group relative bg-surface overflow-hidden flex flex-col">
+<div class="flex-grow w-full overflow-hidden p-stack-md relative">
+<img alt="Ash Valet Tray" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzUpY08L6OCP6no6hfUi807TqleEesA4mtHoW82DwOCrPhxQNpziMMGOMVuy6Q-a24GO2apEsqNLrfTodi5qKGO506Rl_eiYFoteHvRAhfIxtlxBGr-Kf1FvIgyltQC_WlWCJi1-vaSpgANg7eI10B3B8LveE-9BPUkjk34PDGzlzCREt0Jod2FTaGDbqGzKooe1ro9seJqDizE6gKoewQtgLIYomUTc36DgqQHwVN_RH3yjNLpFiHZGaN6ab5Nz5x8pT7-7BCRAQ">
+</div>
+<div class="p-stack-sm bg-surface border-t border-outline-variant/10 z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface text-[16px]">Ash Valet Tray</h3>
+<div class="flex justify-between items-center mt-1">
+<p class="font-body-md text-body-md text-secondary text-[13px]">Solid Ash Wood</p>
+<span class="font-label-md text-label-md text-primary">$95</span>
+</div>
+</div>
+</div>
+<!-- Featured Large Item: Fjord Sideboard -->
+<div class="md:col-span-2 md:row-span-2 group relative bg-surface overflow-hidden flex flex-col">
+<div class="flex-grow w-full overflow-hidden p-stack-lg relative">
+<img alt="Fjord Sideboard" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="images/Fjord%20Sideboard.png">
+<div class="absolute inset-0 bg-surface/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-8 backdrop-blur-md">
+<span class="material-symbols-outlined text-primary text-[40px] mb-4">shelves</span>
+<h4 class="font-headline-md text-[20px] font-semibold text-on-surface mb-2">Internal Organization</h4>
+<p class="font-body-md text-body-md text-secondary max-w-sm">Two adjustable oak shelves per compartment. Integrated cable management and soft-close hinges.</p>
+</div>
+</div>
+<div class="p-stack-lg bg-surface border-t border-outline-variant/10 z-10 flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-stack-sm">Fjord Sideboard</h2>
+<p class="font-body-md text-body-md text-secondary">Solid Oak &amp; Fluted Glass</p>
+</div>
+<button class="w-12 h-12 rounded-none bg-on-surface text-surface flex items-center justify-center transition-colors hover:bg-primary"><span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+</div>
+<!-- Wide Item: Console Table -->
+<div class="md:col-span-2 md:row-span-1 group relative bg-surface overflow-hidden flex flex-col">
+<div class="absolute top-stack-md right-stack-md z-20">
+<span class="inline-flex items-center px-3 py-1 rounded-none bg-surface/90 backdrop-blur-md border border-outline-variant/20 font-label-sm text-label-sm text-primary uppercase tracking-widest">New Arrival</span>
+</div>
+<div class="flex-grow w-full overflow-hidden p-stack-md relative">
+<img alt="Floating Console" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmQx3DkF879es09gzSiyh7dFp78ce90Ad-6imKB0yQ-dKi0hk90LXvWDMeetgXv-cyil_Kh0Z2PB1iKnNDOL_YPHbSCBFUIcaXlgBxAxbbOz4-ua5TuWi7B1TNTsn2cBs-Sgt6jfqlZi3P1dUpaqLJnoO4gmyXzh_vE-CDXuGtqagEA9ePoImQp5J7711qex9l9CDqK-j_jq_ysdP82JlUG2MauqU7LsfVUCgc-1jtmmdthuQDGB5HJQydZCTGa-EOYadxUpAEOvw">
+<div class="absolute inset-0 bg-surface/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-8 backdrop-blur-md">
+<span class="material-symbols-outlined text-primary text-[32px] mb-3">view_week</span>
+<h4 class="font-headline-md text-[18px] font-semibold text-on-surface mb-2">Three Drawer System</h4>
+<p class="font-body-md text-body-md text-secondary">Push-to-open mechanisms with felt-lined interiors for media and accessories.</p>
+</div>
+</div>
+<div class="p-stack-md flex justify-between items-center bg-surface border-t border-outline-variant/10 z-10">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface text-[20px]">Horizon Console</h3>
+<p class="font-body-md text-body-md text-secondary mt-1 text-[14px]">Matte Lacquer &amp; Stone</p>
+</div>
+<button class="px-6 py-2 rounded-none bg-on-surface text-surface font-label-md text-label-md transition-colors hover:bg-primary">View Details</button>
+</div>
+</div>
+</section>
+<!-- Cabinetry & Wardrobes Section -->
+<section class="js-reveal flex flex-col gap-stack-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-stack-md mb-stack-lg">
+<div>
+<p class="font-mono text-[11px] text-secondary tracking-[0.2em] uppercase mb-stack-sm">Cabinetry &amp; Wardrobes</p>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Statement Pieces</h2>
+</div>
+<p class="font-body-md text-body-md text-secondary max-w-md">Architectural storage built to define rooms — combining heirloom joinery with quiet, considered forms.</p>
+</div>
+<!-- Alternating large product layout -->
+<article class="group relative flex flex-col md:flex-row items-stretch gap-[2px] bg-outline-variant/20 overflow-hidden cursor-pointer min-h-[420px]">
+<!-- Image -->
+<div class="w-full md:w-[60%] relative overflow-hidden">
+<div class="w-full h-full min-h-[360px] bg-gradient-to-br from-[#2C2418] via-[#4A3C2A] to-[#1A1510] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-6 left-6 z-10 bg-white/90 text-on-surface-variant px-3 py-1 font-mono text-[10px] uppercase tracking-widest">New Season</span>
+</div>
+<!-- Info card -->
+<div class="w-full md:w-[40%] bg-surface p-10 flex flex-col justify-between">
+<div>
+<p class="font-mono text-[10px] text-secondary tracking-[0.2em] uppercase mb-stack-md">Wardrobe</p>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Natt Wardrobe</h3>
+<p class="font-body-md text-body-md text-secondary mb-stack-lg">Hand-oiled smoked oak exterior with cedar-lined interior. Push-to-open doors conceal three full-width hanging rails and a pull-out shoe shelf. Dovetail-jointed carcass, built to last generations.</p>
+<div class="grid grid-cols-2 gap-stack-sm mb-stack-lg font-mono text-[11px] text-secondary uppercase tracking-widest">
+<span>W 180 × H 220 CM</span>
+<span>D 62 CM</span>
+<span>Smoked Oak</span>
+<span>Cedar Interior</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface">$4,600</span>
+<button class="px-6 py-3 bg-on-surface text-surface font-label-md text-label-md uppercase tracking-wider hover:bg-primary transition-colors">Add to Cart</button>
+</div>
+</div>
+</article>
+<article class="group relative flex flex-col md:flex-row-reverse items-stretch gap-[2px] bg-outline-variant/20 overflow-hidden cursor-pointer min-h-[420px]">
+<!-- Image -->
+<div class="w-full md:w-[60%] relative overflow-hidden">
+<div class="w-full h-full min-h-[360px] bg-gradient-to-br from-[#E8E0D4] via-[#F2EDE4] to-[#D4C8B4] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-6 right-6 z-10 bg-surface/90 text-on-surface-variant px-3 py-1 font-mono text-[10px] uppercase tracking-widest">Glazed Front</span>
+</div>
+<!-- Info card -->
+<div class="w-full md:w-[40%] bg-surface-container-low p-10 flex flex-col justify-between">
+<div>
+<p class="font-mono text-[10px] text-secondary tracking-[0.2em] uppercase mb-stack-md">Display Cabinet</p>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Isbjörn Cabinet</h3>
+<p class="font-body-md text-body-md text-secondary mb-stack-lg">Chalk-white oiled oak frame with hand-blown glass doors and brushed brass pulls. Four adjustable shelves with integrated LED strip lighting to illuminate your most treasured objects.</p>
+<div class="grid grid-cols-2 gap-stack-sm mb-stack-lg font-mono text-[11px] text-secondary uppercase tracking-widest">
+<span>W 100 × H 190 CM</span>
+<span>D 38 CM</span>
+<span>White Oak + Brass</span>
+<span>LED Integrated</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface">$3,800</span>
+<button class="px-6 py-3 bg-on-surface text-surface font-label-md text-label-md uppercase tracking-wider hover:bg-primary transition-colors">Add to Cart</button>
+</div>
+</div>
+</article>
+<article class="group relative flex flex-col md:flex-row items-stretch gap-[2px] bg-outline-variant/20 overflow-hidden cursor-pointer min-h-[420px]">
+<!-- Image -->
+<div class="w-full md:w-[60%] relative overflow-hidden">
+<div class="w-full h-full min-h-[360px] bg-gradient-to-br from-[#3C3028] via-[#5C4A38] to-[#2A2018] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+</div>
+<!-- Info card -->
+<div class="w-full md:w-[40%] bg-surface p-10 flex flex-col justify-between">
+<div>
+<p class="font-mono text-[10px] text-secondary tracking-[0.2em] uppercase mb-stack-md">Bookshelf · Modular</p>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Boreas Bookshelf</h3>
+<p class="font-body-md text-body-md text-secondary mb-stack-lg">Solid American walnut modular shelving system. Mix open and closed bays in any configuration. Hidden steel wall-mount anchors with concealed fixings. Expands in full or half-bay increments.</p>
+<div class="grid grid-cols-2 gap-stack-sm mb-stack-lg font-mono text-[11px] text-secondary uppercase tracking-widest">
+<span>W 240 × H 200 CM</span>
+<span>D 35 CM</span>
+<span>American Walnut</span>
+<span>Modular System</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface">$2,800</span>
+<button class="px-6 py-3 bg-on-surface text-surface font-label-md text-label-md uppercase tracking-wider hover:bg-primary transition-colors">Add to Cart</button>
+</div>
+</div>
+</article>
+</section>
+
+<!-- More Storage — compact grid -->
+<section class="js-reveal flex flex-col gap-stack-lg">
+<div class="flex items-end justify-between mb-stack-md">
+<h3 class="font-headline-md text-headline-md text-on-surface">More Pieces</h3>
+<a class="font-label-md text-label-md text-primary uppercase tracking-wider hover:underline" href="#">View All Storage</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-stack-lg">
+<!-- Drift Entryway Unit -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#9A8870] via-[#B8A888] to-[#786858] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-4 left-4 z-10 bg-white/90 text-on-surface-variant px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-widest">Entry</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h3 class="font-headline-md text-headline-md text-on-surface">Drift Entryway Unit</h3>
+<p class="font-mono text-[13px] text-on-surface-variant">Oiled Oak · Bench + Hooks + Shelf</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 120 × D 38 × H 180 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$2,400</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Fenn Bedside Chest -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#505050] via-[#686868] to-[#383838] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+</div>
+<div class="flex flex-col gap-unit">
+<h3 class="font-headline-md text-headline-md text-on-surface">Fenn Bedside Chest</h3>
+<p class="font-mono text-[13px] text-on-surface-variant">Smoke-Lacquered Oak · 3 Drawers</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 50 × D 40 × H 65 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$1,100</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Lofoten Wall Shelves -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#D4CEC4] via-[#E8E2D8] to-[#B8B2A8] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-4 left-4 z-10 bg-white/90 text-on-surface-variant px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-widest">Set of 3</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h3 class="font-headline-md text-headline-md text-on-surface">Lofoten Wall Shelves</h3>
+<p class="font-mono text-[13px] text-on-surface-variant">Floating Ash · Invisible Mount</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 80 / 60 / 40 CM · D 22 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$490</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Hval Media Unit -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#1E1E1E] via-[#2E2E2E] to-[#0E0E0E] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-4 left-4 z-10 bg-white/90 text-on-surface-variant px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-widest">Media</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h3 class="font-headline-md text-headline-md text-on-surface">Hval Media Unit</h3>
+<p class="font-mono text-[13px] text-on-surface-variant">Matte Black Ash · Cable Management</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 180 × D 42 × H 46 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$1,680</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Seil Coat Stand -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#C8A870] via-[#E0C090] to-[#A88850] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+</div>
+<div class="flex flex-col gap-unit">
+<h3 class="font-headline-md text-headline-md text-on-surface">Seil Coat Stand</h3>
+<p class="font-mono text-[13px] text-on-surface-variant">Solid Brass &amp; Oiled Oak</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">Ø 50 × H 170 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$860</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+<!-- Kveld Chest of Drawers -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-stack-md">
+<div class="w-full h-full bg-gradient-to-br from-[#7A8870] via-[#96A488] to-[#5E6C58] group-hover:scale-105 transition-transform duration-700 ease-out"></div>
+<span class="absolute top-4 left-4 z-10 bg-white/90 text-on-surface-variant px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-widest">5 Drawers</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h3 class="font-headline-md text-headline-md text-on-surface">Kveld Chest</h3>
+<p class="font-mono text-[13px] text-on-surface-variant">Sage-Tinted Oak · Soft-Close</p>
+<p class="font-mono text-[11px] text-secondary tracking-widest mt-unit uppercase">W 90 × D 48 × H 120 CM</p>
+<div class="mt-stack-sm flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">$2,100</span>
+<button class="bg-accent-walnut text-white px-4 py-2 rounded-lg font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">View Details</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+
+<!-- Design Tips Section -->
+<section class="mt-section-gap pt-section-gap border-t border-outline-variant/20 flex flex-col gap-stack-lg">
+<div class="max-w-2xl text-left">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Design Tips: Organizing Minimalist Spaces</h2>
+<p class="font-body-lg text-body-lg text-secondary">A well-organized space brings clarity to the mind. Discover our principles for achieving balance and tranquility through thoughtful storage.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-outline-variant/20 border border-outline-variant/20 bg-surface shadow-sm">
+<div class="p-stack-lg group hover:bg-surface-container-low transition-colors duration-300 cursor-pointer flex flex-col">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center mb-stack-md group-hover:bg-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-secondary group-hover:text-on-primary transition-colors text-[24px]">space_dashboard</span>
+</div>
+<h3 class="font-headline-md text-[20px] font-semibold text-on-surface mb-stack-sm group-hover:text-primary transition-colors">Negative Space</h3>
+<p class="font-body-md text-body-md text-secondary">Leave room to breathe. Don't fill every shelf; let the empty spaces act as frames for your most treasured items.</p>
+</div>
+<div class="p-stack-lg group hover:bg-surface-container-low transition-colors duration-300 cursor-pointer flex flex-col">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center mb-stack-md group-hover:bg-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-secondary group-hover:text-on-primary transition-colors text-[24px]">layers_clear</span>
+</div>
+<h3 class="font-headline-md text-[20px] font-semibold text-on-surface mb-stack-sm group-hover:text-primary transition-colors">Conceal &amp; Reveal</h3>
+<p class="font-body-md text-body-md text-secondary">Use closed cabinets for everyday utility items, and open shelving to display curated art, books, and ceramics.</p>
+</div>
+<div class="p-stack-lg group hover:bg-surface-container-low transition-colors duration-300 cursor-pointer flex flex-col">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center mb-stack-md group-hover:bg-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-secondary group-hover:text-on-primary transition-colors text-[24px]">all_inclusive</span>
+</div>
+<h3 class="font-headline-md text-[20px] font-semibold text-on-surface mb-stack-sm group-hover:text-primary transition-colors">Material Harmony</h3>
+<p class="font-body-md text-body-md text-secondary">Stick to a cohesive palette of materials—like oak, powder-coated steel, and stone—to maintain visual serenity.</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-surface-container-lowest border-t border-surface-container-high">
+<div class="px-6 md:px-margin-desktop py-section-gap flex flex-col md:flex-row justify-between items-start gap-stack-lg max-w-container-max mx-auto">
+<div class="space-y-stack-md">
+<a class="font-display text-headline-md text-on-surface font-bold" href="index.html">Dane Design</a>
+<p class="font-body text-body-md text-secondary max-w-xs">Creating serene environments through minimalist Scandinavian furniture and lighting.</p>
+<div class="text-secondary font-body text-body-md">© 2024 Dane Design. All rights reserved.</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-lg">
+<div class="space-y-4">
+<h5 class="font-label text-label-md uppercase tracking-wider text-on-surface">Collections</h5>
+<ul class="space-y-2">
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="seating.html">Seating</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="lighting.html">Lighting</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="tables.html">Tables</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="storage.html">Storage</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h5 class="font-label text-label-md uppercase tracking-wider text-on-surface">Legal</h5>
+<ul class="space-y-2">
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="shipping.html">Shipping</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="sustainability.html">Sustainability</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="care-guide.html">Care Guide</a></li>
+<li><a class="font-body text-body-md text-secondary hover:text-primary transition-colors" href="showrooms.html">Showrooms</a></li>
+</ul>
+</div>
+</div>
+<div class="w-full md:w-auto">
+<h5 class="font-label text-label-md uppercase tracking-wider text-on-surface mb-4">Journal</h5>
+<form id="newsletter-form" class="flex border-b border-outline-variant pb-2">
+<input id="newsletter-email" aria-label="Email address" class="bg-transparent border-none focus:ring-0 font-body w-full" placeholder="Email address" type="email" required/>
+<button type="submit" aria-label="Subscribe" class="material-symbols-outlined text-secondary hover:text-primary transition-colors">arrow_right_alt</button>
+</form>
+</div>
+</div>
+</footer>
+<script>
+        (function () {
+            var els = document.querySelectorAll('.js-reveal');
+            if (!('IntersectionObserver' in window)) { els.forEach(function (e){e.classList.add('is-visible');}); return; }
+            var obs = new IntersectionObserver(function (entries, o) {
+                entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-visible'); o.unobserve(en.target); } });
+            }, { threshold: 0.1 });
+            els.forEach(function (e){ obs.observe(e); });
+        })();
+    </script>
+<script src="supabase-integration.js"></script>
+<script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

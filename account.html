@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Account | Dane Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;vertical-align:middle}
+  .tab-btn{display:flex;align-items:center;gap:.5rem;padding:.625rem 1rem;border-radius:.75rem;font-size:.875rem;font-weight:500;color:#5c5f61;transition:all .15s;white-space:nowrap;cursor:pointer;border:none;background:transparent;font-family:Inter,sans-serif;}
+  .tab-btn:hover{background:#f0f4f7;color:#181c1f}
+  .tab-btn.active{background:#e8f0f4;color:#006686;font-weight:600}
+  .field-wrap input,.field-wrap select,.field-wrap textarea{width:100%;border:1px solid #bec8ce;border-radius:.75rem;padding:.75rem 1rem;font-family:Inter,sans-serif;font-size:.9375rem;color:#181c1f;outline:none;transition:border-color .2s;background:#fff;}
+  .field-wrap input:focus,.field-wrap select:focus{border-color:#006686;box-shadow:0 0 0 3px rgba(0,102,134,.1)}
+  .field-wrap label{display:block;font-size:.6875rem;font-weight:600;color:#5c5f61;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem}
+  .badge{display:inline-flex;align-items:center;padding:.2rem .6rem;border-radius:9999px;font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+  .badge-pending{background:#fef3c7;color:#92400e}
+  .badge-confirmed{background:#dbeafe;color:#1e40af}
+  .badge-processing{background:#ede9fe;color:#5b21b6}
+  .badge-shipped{background:#d1fae5;color:#065f46}
+  .badge-delivered{background:#d1fae5;color:#065f46}
+  .badge-cancelled{background:#fee2e2;color:#991b1b}
+  .spinner{width:24px;height:24px;border:2px solid #e5e8ec;border-top-color:#006686;border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media(max-width:767px){#sidebar{overflow-x:auto;display:flex;flex-direction:row;border-right:none;border-bottom:1px solid #e5e8ec;padding:.5rem 1rem;gap:.25rem;}#sidebar .tab-btn{flex-shrink:0;}}
+</style>
+<script src="config.js"></script>
+</head>
+<body class="bg-[#f7fafd] text-[#181c1f] font-['Inter'] antialiased min-h-screen">
+
+<!-- Nav placeholder (app.js renders this) -->
+<nav class="border-b border-[#e5e8ec] bg-white">
+  <div class="max-w-[1200px] mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="index.html" class="font-['Plus_Jakarta_Sans'] text-xl font-bold text-[#181c1f]">Dane Design</a>
+    <a href="index.html" class="text-sm text-[#5c5f61] flex items-center gap-1 hover:text-[#006686] transition-colors"><span class="material-symbols-outlined text-base">arrow_back</span>Back to shop</a>
+  </div>
+</nav>
+
+<!-- Auth guard -->
+<div id="auth-required" class="hidden max-w-md mx-auto px-6 py-20 text-center">
+  <span class="material-symbols-outlined text-[#006686] text-5xl block mb-4">account_circle</span>
+  <h2 class="font-['Plus_Jakarta_Sans'] text-2xl font-semibold text-[#181c1f] mb-3">Sign in to view your account</h2>
+  <p class="text-[#5c5f61] font-light mb-6">Access your orders, wishlist, and saved addresses.</p>
+  <button onclick="openAuthModal()" class="bg-[#006686] text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity">Sign In or Register</button>
+</div>
+
+<!-- Main layout -->
+<div id="account-layout" class="hidden max-w-[1100px] mx-auto px-4 md:px-6 py-8">
+  <div class="flex flex-col md:flex-row gap-6">
+
+    <!-- Sidebar / Tab bar -->
+    <aside id="sidebar" class="w-full md:w-56 md:flex-shrink-0 md:border-r md:border-[#e5e8ec] md:pr-4 md:pt-2">
+      <div class="mb-4 hidden md:block px-2">
+        <p id="sidebar-name" class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f] text-base truncate"></p>
+        <p id="sidebar-email" class="text-xs text-[#5c5f61] truncate mt-0.5"></p>
+      </div>
+      <nav class="flex flex-col gap-1">
+        <button class="tab-btn" data-tab="orders" onclick="switchTab('orders')"><span class="material-symbols-outlined text-lg">shopping_bag</span>Orders</button>
+        <button class="tab-btn" data-tab="wishlist" onclick="switchTab('wishlist')"><span class="material-symbols-outlined text-lg">favorite</span>Wishlist</button>
+        <button class="tab-btn" data-tab="addresses" onclick="switchTab('addresses')"><span class="material-symbols-outlined text-lg">location_on</span>Addresses</button>
+        <button class="tab-btn" data-tab="profile" onclick="switchTab('profile')"><span class="material-symbols-outlined text-lg">person</span>Profile</button>
+        <button onclick="signOut()" class="tab-btn mt-4 text-red-600 hover:bg-red-50"><span class="material-symbols-outlined text-lg">logout</span>Sign Out</button>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <main class="flex-1 min-w-0">
+
+      <!-- Orders tab -->
+      <div id="tab-orders" class="tab-panel hidden">
+        <h2 class="font-['Plus_Jakarta_Sans'] text-xl font-semibold text-[#181c1f] mb-5">My Orders</h2>
+        <div id="orders-loading" class="text-center py-12"><div class="spinner mx-auto"></div></div>
+        <div id="orders-empty" class="hidden text-center py-12">
+          <span class="material-symbols-outlined text-[#bec8ce] text-5xl block mb-3">shopping_bag</span>
+          <p class="text-[#5c5f61] font-light">No orders yet. <a href="index.html" class="text-[#006686] hover:underline">Explore the collection</a></p>
+        </div>
+        <div id="orders-list" class="space-y-4"></div>
+      </div>
+
+      <!-- Wishlist tab -->
+      <div id="tab-wishlist" class="tab-panel hidden">
+        <h2 class="font-['Plus_Jakarta_Sans'] text-xl font-semibold text-[#181c1f] mb-5">Wishlist</h2>
+        <div id="wishlist-loading" class="text-center py-12"><div class="spinner mx-auto"></div></div>
+        <div id="wishlist-empty" class="hidden text-center py-12">
+          <span class="material-symbols-outlined text-[#bec8ce] text-5xl block mb-3">favorite_border</span>
+          <p class="text-[#5c5f61] font-light">Your wishlist is empty. <a href="index.html" class="text-[#006686] hover:underline">Browse furniture</a></p>
+        </div>
+        <div id="wishlist-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- Addresses tab -->
+      <div id="tab-addresses" class="tab-panel hidden">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="font-['Plus_Jakarta_Sans'] text-xl font-semibold text-[#181c1f]">Saved Addresses</h2>
+          <button onclick="showAddressForm()" class="text-sm text-[#006686] font-medium flex items-center gap-1 hover:opacity-80"><span class="material-symbols-outlined text-base">add</span>Add address</button>
+        </div>
+        <div id="addresses-loading" class="text-center py-12"><div class="spinner mx-auto"></div></div>
+        <div id="addresses-list" class="space-y-3"></div>
+        <!-- Address form -->
+        <div id="address-form-wrapper" class="hidden mt-6 bg-white border border-[#e5e8ec] rounded-2xl p-6">
+          <h3 class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f] mb-4">New Address</h3>
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="field-wrap"><label>Full name</label><input type="text" id="addr-name" placeholder="Name"/></div>
+              <div class="field-wrap"><label>Phone</label><input type="tel" id="addr-phone" placeholder="Phone"/></div>
+            </div>
+            <div class="field-wrap"><label>Line 1 *</label><input type="text" id="addr-line1" placeholder="Street and number"/></div>
+            <div class="field-wrap"><label>Line 2</label><input type="text" id="addr-line2" placeholder="Apartment, suite…"/></div>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="field-wrap col-span-2"><label>City</label><input type="text" id="addr-city" placeholder="City"/></div>
+              <div class="field-wrap"><label>Postal</label><input type="text" id="addr-postal" placeholder="Postal code"/></div>
+            </div>
+            <div class="field-wrap"><label>Country</label>
+              <select id="addr-country">
+                <option value="US">United States</option><option value="GB">United Kingdom</option>
+                <option value="DK" selected>Denmark</option><option value="SE">Sweden</option>
+                <option value="NO">Norway</option><option value="FI">Finland</option>
+                <option value="DE">Germany</option><option value="FR">France</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="checkbox" id="addr-default" class="rounded"/>
+              <label for="addr-default" class="text-sm text-[#5c5f61]">Set as default shipping address</label>
+            </div>
+          </div>
+          <div class="flex gap-3 mt-5">
+            <button onclick="saveAddress()" class="bg-[#006686] text-white font-medium px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity text-sm">Save Address</button>
+            <button onclick="document.getElementById('address-form-wrapper').classList.add('hidden')" class="text-sm text-[#5c5f61] px-4">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile tab -->
+      <div id="tab-profile" class="tab-panel hidden">
+        <h2 class="font-['Plus_Jakarta_Sans'] text-xl font-semibold text-[#181c1f] mb-5">Profile Settings</h2>
+        <div class="bg-white border border-[#e5e8ec] rounded-2xl p-8 max-w-xl">
+          <div class="space-y-4 mb-6">
+            <div class="field-wrap"><label>Full name</label><input type="text" id="prof-name" placeholder="Your name"/></div>
+            <div class="field-wrap"><label>Email</label><input type="text" id="prof-email" disabled class="opacity-60 cursor-not-allowed"/></div>
+            <div class="field-wrap"><label>Phone</label><input type="tel" id="prof-phone" placeholder="+45 12 34 56 78"/></div>
+          </div>
+          <p id="profile-save-msg" class="text-sm mb-3 hidden"></p>
+          <button onclick="saveProfile()" class="bg-[#006686] text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity">Save Changes</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Order detail modal -->
+<div id="order-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div class="p-6 border-b border-[#e5e8ec] flex items-center justify-between">
+      <h3 class="font-['Plus_Jakarta_Sans'] font-semibold text-[#181c1f]">Order <span id="modal-order-num"></span></h3>
+      <button onclick="closeOrderModal()" class="w-8 h-8 rounded-full bg-[#f7fafd] flex items-center justify-center hover:bg-[#e5e8ec] transition-colors"><span class="material-symbols-outlined text-base">close</span></button>
+    </div>
+    <div id="modal-order-content" class="p-6"></div>
+  </div>
+</div>
+
+<script>
+var BACKEND_URL = window.DANE_CONFIG?.backendUrl || 'http://localhost:3001';
+var session = null;
+var profileData = null;
+var currentTab = 'orders';
+
+function fmt(n){return'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function fmtDate(s){return new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function getToken(){return session&&session.access_token||null;}
+
+function getHeaders(){
+  return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};
+}
+
+function apiFetch(path,opts){
+  return fetch(BACKEND_URL+path,Object.assign({headers:getHeaders()},opts||{}))
+    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||'Request failed');return d;});});
+}
+
+function openAuthModal(){
+  // Trigger the main app.js auth modal if available
+  var btn=document.querySelector('[data-auth-trigger]');
+  if(btn)btn.click();
+  else alert('Please sign in from the main site navigation.');
+}
+
+function signOut(){
+  localStorage.removeItem('dane-session');
+  localStorage.removeItem('dane-cart');
+  window.location.href='index.html';
+}
+
+function init(){
+  try{var s=localStorage.getItem('dane-session');if(s)session=JSON.parse(s);}catch(e){}
+
+  if(!session||!session.user){
+    document.getElementById('auth-required').classList.remove('hidden');
+    return;
+  }
+
+  document.getElementById('account-layout').classList.remove('hidden');
+  document.getElementById('sidebar-name').textContent=session.user.user_metadata?.full_name||session.user.email;
+  document.getElementById('sidebar-email').textContent=session.user.email;
+
+  // Determine initial tab from URL
+  var params=new URLSearchParams(window.location.search);
+  var tab=params.get('tab')||'orders';
+  switchTab(tab);
+}
+
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab-btn[data-tab]').forEach(function(b){
+    b.classList.toggle('active',b.dataset.tab===tab);
+  });
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.add('hidden');});
+  var panel=document.getElementById('tab-'+tab);
+  if(panel)panel.classList.remove('hidden');
+
+  history.replaceState(null,'','?tab='+tab);
+
+  if(tab==='orders')loadOrders();
+  else if(tab==='wishlist')loadWishlist();
+  else if(tab==='addresses')loadAddresses();
+  else if(tab==='profile')loadProfile();
+}
+
+// ─── ORDERS ─────────────────────────────────────────────────────────────────
+function loadOrders(){
+  var loadingEl=document.getElementById('orders-loading');
+  var emptyEl=document.getElementById('orders-empty');
+  var listEl=document.getElementById('orders-list');
+  loadingEl.classList.remove('hidden');
+  emptyEl.classList.add('hidden');
+  listEl.innerHTML='';
+
+  apiFetch('/api/orders')
+  .then(function(data){
+    loadingEl.classList.add('hidden');
+    var orders=data.orders||[];
+    if(orders.length===0){emptyEl.classList.remove('hidden');return;}
+    listEl.innerHTML=orders.map(renderOrderCard).join('');
+  })
+  .catch(function(){
+    loadingEl.classList.add('hidden');
+    listEl.innerHTML='<p class="text-red-600 text-sm">Could not load orders. Please try again.</p>';
+  });
+}
+
+function statusBadge(status){
+  var cls={'pending':'badge-pending','confirmed':'badge-confirmed','processing':'badge-processing','shipped':'badge-shipped','delivered':'badge-delivered','cancelled':'badge-cancelled'};
+  return'<span class="badge '+(cls[status]||'badge-pending')+'">'+status+'</span>';
+}
+
+function renderOrderCard(order){
+  var items=order.order_items||[];
+  var preview=items.slice(0,2).map(function(i){return i.product_name||'Item';}).join(', ');
+  if(items.length>2)preview+=' +'+( items.length-2)+' more';
+  return'<div class="bg-white border border-[#e5e8ec] rounded-2xl p-5 cursor-pointer hover:border-[#006686] transition-colors" onclick="openOrderModal(\''+order.id+'\')">'+
+    '<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">'+
+      '<div>'+
+        '<p class="font-[\'Plus_Jakarta_Sans\'] font-semibold text-[#181c1f]">'+order.order_number+'</p>'+
+        '<p class="text-xs text-[#5c5f61] mt-0.5">'+fmtDate(order.created_at)+'</p>'+
+      '</div>'+
+      '<div class="flex items-center gap-3">'+statusBadge(order.status)+'<span class="font-semibold text-[#006686]">'+fmt(order.total_amount)+'</span>'+
+      '</div>'+
+    '</div>'+
+    '<p class="text-sm text-[#5c5f61] truncate">'+preview+'</p>'+
+  '</div>';
+}
+
+var ordersCache={};
+function openOrderModal(id){
+  document.getElementById('order-modal').style.display='flex';
+  document.getElementById('modal-order-content').innerHTML='<div class="text-center py-8"><div class="spinner mx-auto"></div></div>';
+
+  if(ordersCache[id]){renderOrderModal(ordersCache[id]);return;}
+
+  apiFetch('/api/orders/'+id)
+  .then(function(data){ordersCache[id]=data.order;renderOrderModal(data.order);})
+  .catch(function(){document.getElementById('modal-order-content').innerHTML='<p class="text-red-600 text-sm text-center">Could not load order details.</p>';});
+}
+
+function renderOrderModal(order){
+  document.getElementById('modal-order-num').textContent=order.order_number;
+  var items=order.order_items||[];
+  var addr=order.shipping_address||{};
+  document.getElementById('modal-order-content').innerHTML=
+    '<div class="mb-4">'+statusBadge(order.status)+'<span class="text-xs text-[#5c5f61] ml-2">'+fmtDate(order.created_at)+'</span></div>'+
+    '<div class="space-y-2 mb-5">'+
+      items.map(function(i){return'<div class="flex justify-between text-sm py-2 border-b border-[#f7fafd]"><span class="text-[#181c1f]">'+(i.product_name||'Item')+' <span class="text-[#5c5f61]">×'+i.quantity+'</span></span><span class="font-medium">'+fmt(i.unit_price*i.quantity)+'</span></div>';}).join('')+
+    '</div>'+
+    '<div class="space-y-1 text-sm border-t border-[#e5e8ec] pt-3 mb-4">'+
+      '<div class="flex justify-between text-[#5c5f61]"><span>Subtotal</span><span>'+fmt(order.subtotal_amount)+'</span></div>'+
+      (order.discount_amount>0?'<div class="flex justify-between text-green-700"><span>Discount</span><span>-'+fmt(order.discount_amount)+'</span></div>':'')+
+      '<div class="flex justify-between text-[#5c5f61]"><span>Shipping</span><span>'+(order.shipping_amount?fmt(order.shipping_amount):'Free')+'</span></div>'+
+      '<div class="flex justify-between font-semibold text-[#181c1f] pt-1 border-t border-[#e5e8ec]"><span>Total</span><span class="text-[#006686]">'+fmt(order.total_amount)+'</span></div>'+
+    '</div>'+
+    (addr.line1?'<div class="bg-[#f7fafd] rounded-xl p-4 text-sm"><p class="text-xs text-[#5c5f61] uppercase tracking-wider mb-1">Shipping to</p><p class="text-[#181c1f] leading-relaxed">'+(addr.full_name?'<strong>'+addr.full_name+'</strong><br>':'')+addr.line1+(addr.line2?', '+addr.line2:'')+',<br>'+[addr.city,addr.postal_code,addr.country].filter(Boolean).join(', ')+'</p></div>':'');
+}
+
+function closeOrderModal(){
+  document.getElementById('order-modal').style.display='none';
+}
+
+// ─── WISHLIST ────────────────────────────────────────────────────────────────
+function loadWishlist(){
+  var loadingEl=document.getElementById('wishlist-loading');
+  var emptyEl=document.getElementById('wishlist-empty');
+  var gridEl=document.getElementById('wishlist-grid');
+  loadingEl.classList.remove('hidden');
+  emptyEl.classList.add('hidden');
+  gridEl.innerHTML='';
+
+  apiFetch('/api/wishlist')
+  .then(function(data){
+    loadingEl.classList.add('hidden');
+    var items=data.wishlist||[];
+    if(items.length===0){emptyEl.classList.remove('hidden');return;}
+    gridEl.innerHTML=items.map(function(item){
+      var p=item.product||item;
+      return'<div class="bg-white border border-[#e5e8ec] rounded-2xl overflow-hidden group">'+
+        '<div class="aspect-square overflow-hidden bg-[#f7fafd]">'+
+          '<img src="'+(p.images&&p.images[0]?p.images[0].image_url:'')+'" alt="'+(p.name||'')+'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>'+
+        '</div>'+
+        '<div class="p-4">'+
+          '<p class="font-[\'Plus_Jakarta_Sans\'] font-semibold text-[#181c1f] text-sm">'+p.name+'</p>'+
+          '<p class="text-xs text-[#5c5f61] mt-0.5">'+(p.material||'')+'</p>'+
+          '<div class="flex items-center justify-between mt-3">'+
+            '<span class="font-semibold text-[#006686]">'+fmt(p.price)+'</span>'+
+            '<div class="flex gap-2">'+
+              '<button onclick="addToCartFromWishlist(\''+p.slug+'\')" class="text-xs bg-[#006686] text-white px-3 py-1.5 rounded-full hover:opacity-80 transition-opacity">Add to Cart</button>'+
+              '<button onclick="removeFromWishlist(\''+p.id+'\')" class="text-xs border border-[#e5e8ec] px-3 py-1.5 rounded-full hover:border-red-300 hover:text-red-600 transition-colors">Remove</button>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  })
+  .catch(function(){
+    loadingEl.classList.add('hidden');
+    gridEl.innerHTML='<p class="text-red-600 text-sm col-span-full">Could not load wishlist.</p>';
+  });
+}
+
+function addToCartFromWishlist(slug){
+  var cart=[];
+  try{cart=JSON.parse(localStorage.getItem('dane-cart'))||[];}catch(e){}
+  var existing=cart.find(function(i){return i.id===slug;});
+  if(existing)existing.qty+=1;
+  else cart.push({id:slug,qty:1});
+  localStorage.setItem('dane-cart',JSON.stringify(cart));
+  showToast('Added to cart');
+}
+
+function removeFromWishlist(productId){
+  apiFetch('/api/wishlist/toggle',{method:'POST',body:JSON.stringify({product_id:productId})})
+  .then(function(){loadWishlist();})
+  .catch(function(){showToast('Could not remove item','error');});
+}
+
+// ─── ADDRESSES ──────────────────────────────────────────────────────────────
+function loadAddresses(){
+  var loadingEl=document.getElementById('addresses-loading');
+  var listEl=document.getElementById('addresses-list');
+  loadingEl.classList.remove('hidden');
+  listEl.innerHTML='';
+
+  apiFetch('/api/addresses')
+  .then(function(data){
+    loadingEl.classList.add('hidden');
+    var addrs=data.addresses||[];
+    if(addrs.length===0){listEl.innerHTML='<p class="text-[#5c5f61] text-sm">No saved addresses. Add one below.</p>';return;}
+    listEl.innerHTML=addrs.map(function(a){
+      return'<div class="bg-white border border-[#e5e8ec] rounded-2xl p-5 flex items-start justify-between gap-4">'+
+        '<div>'+
+          (a.is_default?'<span class="badge badge-confirmed mb-2">Default</span><br>':'')+
+          '<p class="font-medium text-[#181c1f] text-sm">'+(a.full_name||'')+'</p>'+
+          '<p class="text-sm text-[#5c5f61] mt-0.5">'+[a.line1,a.line2,a.city,a.postal_code,a.country].filter(Boolean).join(', ')+'</p>'+
+        '</div>'+
+        '<button onclick="deleteAddress(\''+a.id+'\')" class="text-[#bec8ce] hover:text-red-500 transition-colors flex-shrink-0"><span class="material-symbols-outlined text-xl">delete</span></button>'+
+      '</div>';
+    }).join('');
+  })
+  .catch(function(){
+    loadingEl.classList.add('hidden');
+    listEl.innerHTML='<p class="text-red-600 text-sm">Could not load addresses.</p>';
+  });
+}
+
+function showAddressForm(){
+  document.getElementById('address-form-wrapper').classList.remove('hidden');
+  document.getElementById('address-form-wrapper').scrollIntoView({behavior:'smooth'});
+}
+
+function saveAddress(){
+  var body={
+    full_name:document.getElementById('addr-name').value.trim(),
+    phone:document.getElementById('addr-phone').value.trim(),
+    line1:document.getElementById('addr-line1').value.trim(),
+    line2:document.getElementById('addr-line2').value.trim(),
+    city:document.getElementById('addr-city').value.trim(),
+    postal_code:document.getElementById('addr-postal').value.trim(),
+    country:document.getElementById('addr-country').value,
+    is_default:document.getElementById('addr-default').checked
+  };
+  if(!body.line1){showToast('Address line 1 is required','error');return;}
+
+  apiFetch('/api/addresses',{method:'POST',body:JSON.stringify(body)})
+  .then(function(){
+    document.getElementById('address-form-wrapper').classList.add('hidden');
+    loadAddresses();
+    showToast('Address saved');
+  })
+  .catch(function(err){showToast(err.message||'Could not save address','error');});
+}
+
+function deleteAddress(id){
+  if(!confirm('Delete this address?'))return;
+  apiFetch('/api/addresses/'+id,{method:'DELETE'})
+  .then(function(){loadAddresses();})
+  .catch(function(){showToast('Could not delete address','error');});
+}
+
+// ─── PROFILE ─────────────────────────────────────────────────────────────────
+function loadProfile(){
+  apiFetch('/api/profile')
+  .then(function(data){
+    profileData=data.profile||data;
+    document.getElementById('prof-name').value=profileData.full_name||'';
+    document.getElementById('prof-email').value=session.user.email||'';
+    document.getElementById('prof-phone').value=profileData.phone||'';
+  })
+  .catch(function(){
+    document.getElementById('prof-email').value=session.user.email||'';
+  });
+}
+
+function saveProfile(){
+  var body={
+    full_name:document.getElementById('prof-name').value.trim(),
+    phone:document.getElementById('prof-phone').value.trim()
+  };
+  var msgEl=document.getElementById('profile-save-msg');
+  msgEl.textContent='Saving…';
+  msgEl.className='text-sm mb-3 text-[#5c5f61]';
+  msgEl.classList.remove('hidden');
+
+  apiFetch('/api/profile',{method:'PATCH',body:JSON.stringify(body)})
+  .then(function(){
+    msgEl.className='text-sm mb-3 text-green-700';
+    msgEl.textContent='✓ Profile saved';
+    document.getElementById('sidebar-name').textContent=body.full_name||session.user.email;
+    setTimeout(function(){msgEl.classList.add('hidden');},3000);
+  })
+  .catch(function(err){
+    msgEl.className='text-sm mb-3 text-red-600';
+    msgEl.textContent=err.message||'Could not save.';
+  });
+}
+
+function showToast(msg,type){
+  var t=document.createElement('div');
+  t.textContent=msg;
+  var bg=type==='error'?'#ba1a1a':'#006686';
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 24px;border-radius:9999px;font-family:Inter,sans-serif;font-size:14px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.15);transition:opacity .3s;white-space:nowrap;pointer-events:none;background:'+bg+';color:#fff;';
+  document.body.appendChild(t);
+  setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},300);},3000);
+}
+
+// Close modal on outside click
+document.getElementById('order-modal').addEventListener('click',function(e){if(e.target===this)closeOrderModal();});
+
+init();
+</script>
+</body>
+</html>
