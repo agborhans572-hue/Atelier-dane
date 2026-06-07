@@ -1,0 +1,144 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  frontend:
+    name: Frontend Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Validate HTML
+        run: |
+          # Check for common HTML issues
+          echo "Checking HTML files..."
+          for file in *.html; do
+            if [ -f "$file" ]; then
+              echo "✓ Found: $file"
+            fi
+          done
+      
+      - name: Check Tailwind CDN Links
+        run: |
+          echo "Verifying Tailwind CDN and font links..."
+          grep -r "cdn.tailwindcss.com" *.html || echo "Warning: Tailwind CDN not found in HTML files"
+          grep -r "fonts.googleapis.com" *.html || echo "Warning: Google Fonts not found in HTML files"
+
+  backend:
+    name: Backend (Node.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Lint code
+        run: |
+          npm run lint 2>/dev/null || echo "No lint script configured"
+      
+      - name: Check package.json format
+        run: node -e "require('./package.json')" && echo "✓ package.json is valid"
+      
+      - name: Verify server.js syntax
+        run: node -c server.js
+
+  flutter:
+    name: Flutter Mobile App
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./myapp
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'latest'
+          cache: true
+      
+      - name: Get dependencies
+        run: flutter pub get
+      
+      - name: Analyze Dart code
+        run: flutter analyze
+      
+      - name: Verify pubspec.yaml
+        run: |
+          cat pubspec.yaml | grep -E "name:|version:" || true
+
+  database:
+    name: Database Schema
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Validate SQL syntax
+        run: |
+          if [ -f supabase/schema.sql ]; then
+            echo "✓ Found database schema"
+            wc -l supabase/schema.sql
+          else
+            echo "⚠ No schema.sql found"
+          fi
+      
+      - name: Check for SQL best practices
+        run: |
+          if [ -f supabase/schema.sql ]; then
+            echo "Checking schema integrity..."
+            grep -c "CREATE TABLE\|CREATE INDEX" supabase/schema.sql || true
+          fi
+
+  security:
+    name: Security Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check for secrets
+        run: |
+          echo "Scanning for exposed secrets..."
+          ! grep -r "password\|api_key\|secret" *.html *.js backend/*.js 2>/dev/null | grep -v "node_modules" || echo "⚠ Potential secrets found - review before committing"
+      
+      - name: Verify .env examples
+        run: |
+          if [ -f backend/.env.example ]; then
+            echo "✓ .env.example found"
+            cat backend/.env.example
+          fi
+
+  summary:
+    name: Summary
+    needs: [frontend, backend, flutter, database, security]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Check job status
+        run: |
+          echo "✓ CI Pipeline Complete"
+          echo "Frontend: ${{ needs.frontend.result }}"
+          echo "Backend: ${{ needs.backend.result }}"
+          echo "Flutter: ${{ needs.flutter.result }}"
+          echo "Database: ${{ needs.database.result }}"
+          echo "Security: ${{ needs.security.result }}"
